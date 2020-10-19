@@ -1,0 +1,134 @@
+const db = require('../models');
+const qs = require('querystring');
+require('dotenv').config();
+
+exports.githubLogin = async (req, res, next) => {
+  try {
+    const {email, socialType} = req.body;
+    const loginUser = await db.User.findOne({
+      where: {
+        email: email,
+        socialType: socialType,
+      },
+      attributes: ['id', 'email', 'socialType', 'name', 'about', 'imgSrc'],
+      include: [
+        {
+          model: db.Post,
+          attributes: ['id'],
+        },
+        {
+          model: db.Sns,
+          attributes: ['github', 'gmail', 'facebook', 'userId'],
+        },
+      ],
+    });
+    res.json(loginUser);
+  } catch (err) {
+    console.error(err);
+    return next(err);
+  }
+};
+
+exports.githubCallback = async (req, res, next) => {
+  try {
+    const {id, displayName, username, profileUrl, emails, photos, provider} = res.req.user;
+    const data = res.req.user;
+    const userInfo = {
+      id,
+      displayName,
+      name: username,
+      profileUrl,
+      email: emails[0].value,
+      photo: photos[0].value,
+      provider,
+      about: data._json.bio,
+      location: data._json.location,
+      job: data._json.company,
+    };
+
+    const query = qs.stringify({
+      email: userInfo.email,
+      socialType: 'github',
+    });
+    const exUser = await db.User.findOne({
+      where: {
+        email: userInfo.email,
+      },
+    });
+
+    if (exUser && exUser.socialType == null) {
+      // 일반 회원가입으로 이미 가입한 유저 로그인 진행
+      await db.User.update({
+        openId: userInfo.id,
+        socialType: userInfo.provider,
+        imgSrc: userInfo.photo,
+        location: userInfo.location,
+        about: userInfo.about,
+        job: userInfo.job,
+      });
+      return res.redirect(`${process.env.CLIENT_HOST}`);
+    }
+    await db.User.findOrCreate({
+      where: {openId: userInfo.id},
+      defaults: {
+        openId: userInfo.id,
+        name: userInfo.name,
+        email: userInfo.email,
+        socialType: userInfo.provider,
+        imgSrc: userInfo.photo,
+        location: userInfo.location,
+        about: userInfo.about,
+        job: userInfo.job,
+      },
+    });
+
+    return res.redirect(`${process.env.CLIENT_HOST}`);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+exports.googleCallback = async (req, res, next) => {
+  try {
+    const data = res.req.user;
+    const userInfo = {
+      id: data.id,
+      name: data.displayName,
+      photo: data.photos[0].value,
+      email: data.emails[0].value,
+      provider: data.provider,
+    };
+    const exUser = await db.User.findOne({
+      where: {
+        email: userInfo.email,
+      },
+    });
+    if (exUser && exUser.socialType == null) {
+      // 일반 회원가입으로 이미 가입했으면 socialLogin으로 update
+      await db.User.update({
+        openId: userInfo.id,
+        socialType: userInfo.provider,
+        imgSrc: userInfo.photo,
+      });
+
+      return res.redirect(`${process.env.CLIENT_HOST}`);
+    }
+    await db.User.findOrCreate({
+      where: {openId: userInfo.id},
+      defaults: {
+        openId: userInfo.id,
+        name: userInfo.name,
+        email: userInfo.email,
+        socialType: userInfo.provider,
+        imgSrc: userInfo.photo,
+        location: '',
+        about: '',
+        job: '',
+      },
+    });
+
+    return res.redirect(`${process.env.CLIENT_HOST}`);
+  } catch (err) {
+    console.error(err);
+  }
+};
