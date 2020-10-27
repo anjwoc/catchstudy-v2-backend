@@ -2,12 +2,15 @@ const db = require('../models');
 
 exports.addPost = async (req, res, next) => {
   try {
-    const {title, content, location, hashtags, category} = req.body;
+    const {title, content, location, hashtags, category, type, numPeople, coverImg} = req.body;
     const newPost = await db.Post.create({
       title: title,
       content: content,
+      coverImg: coverImg,
       location: location,
       category: category,
+      type: type,
+      numPeople: numPeople,
       userId: req.user.id,
       hit: 1,
     });
@@ -164,6 +167,31 @@ exports.updateStatus = async (req, res, next) => {
 exports.uploadImage = (req, res, next) => {
   // v.filename이 v.location으로 변경
   res.json(req.files.map(v => v.location));
+};
+
+exports.uploadThumbnail = async (req, res, next) => {
+  try {
+    // const post = await db.Post.findOne({where: {id: req.body.postId}});
+    // if (!post) {
+    //   res.status(404).send('존재하지 않는 게시글입니다.');
+    // }
+    // if (req.file.image) {
+    //   const path = req.file.image.location;
+    //   await db.Post.update(
+    //     {
+    //       coverImg: path,
+    //     },
+    //     {
+    //       where: {id: req.body.postId},
+    //     },
+    //   );
+    //   return res.status(304).send('No Change');
+    // }
+
+    return res.json(req.file.location);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 exports.loadUpdatePost = async (req, res, next) => {

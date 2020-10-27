@@ -8,17 +8,17 @@ AWS.config.update({
   region: 'ap-northeast-2',
   accessKeyId: process.env.S3_ACCESS_KEY_ID,
   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-})
+});
 
 exports.isLoggedIn = (req, res, next) => {
-  if (req.session.cookie){
+  if (req.session.cookie) {
     return next();
   }
   return res.status(401).send('로그인이 필요합니다.');
 };
 
 exports.isNotLoggedIn = (req, res, next) => {
-  if (!req.isAuthenticated()){
+  if (!req.isAuthenticated()) {
     return next();
   }
   return res.status(401).send('로그인 한 사람은 할 수 없습니다.');
@@ -30,10 +30,10 @@ exports.uploadProfileImage = multer({
     bucket: 'catchdev-bucket',
     acl: 'public-read', // 클라이언트에서 자유롭게 사용하기 위함
     key(req, file, cb) {
-      cb(null, `original/profile/${Date.now()}${path.basename(file.originalname)}`)
-    }
+      cb(null, `original/profile/${Date.now()}-${path.basename(file.originalname)}`);
+    },
   }),
-  limit: { fileSize: 22 * 1024 * 1024 },
+  limit: {fileSize: 22 * 1024 * 1024},
 });
 
 exports.upload = multer({
@@ -42,12 +42,11 @@ exports.upload = multer({
     bucket: 'catchdev-bucket',
     acl: 'public-read', // 클라이언트에서 자유롭게 사용하기 위함
     key(req, file, cb) {
-      cb(null, `original/${Date.now()}${path.basename(file.originalname)}`)
-    }
+      cb(null, `original/${Date.now()}-${path.basename(file.originalname)}`);
+    },
   }),
-  limit: { fileSize: 22 * 1024 * 1024 },
+  limit: {fileSize: 22 * 1024 * 1024},
 });
-
 
 // exports.uploadProfileImage = multer({
 //   storage: multer.diskStorage({

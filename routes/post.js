@@ -15,6 +15,9 @@ router.get('/:id', post.loadPost);
 router.post('/', isLoggedIn, post.addPost);
 // 이미지 업로드
 router.post('/images', isLoggedIn, upload.array('image'), post.uploadImage);
+
+router.post('/thumbnail', isLoggedIn, upload.single('image'), post.uploadThumbnail);
+
 // 모집 완료로 상태 변경
 router.post('/:id/status', isLoggedIn, post.updateStatus);
 // 좋아요 추가

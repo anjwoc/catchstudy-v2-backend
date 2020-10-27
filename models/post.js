@@ -10,6 +10,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT, //40자 이내
         allowNull: false, // 필수
       },
+      coverImg: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+      },
+      type: {
+        type: DataTypes.ENUM,
+        allowNull: false,
+        values: ['online', 'offline'],
+      },
       category: {
         type: DataTypes.ENUM,
         allowNull: false,
@@ -17,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       location: {
         type: DataTypes.STRING(20),
+        allowNull: false,
+      },
+      numPeople: {
+        type: DataTypes.STRING(15),
         allowNull: false,
       },
       numComments: {

@@ -1,4 +1,4 @@
-const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 const express = require('express');
 const comment = require('../controllers/comment');
 
@@ -11,9 +11,9 @@ router.get('/:id', comment.getComments);
 router.post('/update/:id', isLoggedIn, comment.updateComment);
 
 // 댓글 작성
-router.post('/:id', isLoggedIn, isLoggedIn, comment.addComment);
+router.post('/:id', isLoggedIn, comment.addComment);
 
 // 댓글 삭제
 router.delete('/:id', isLoggedIn, comment.deleteComment);
 
-module.exports = router
+module.exports = router;
