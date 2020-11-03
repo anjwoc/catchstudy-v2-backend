@@ -18,7 +18,21 @@ exports.allPosts = async (req, res, next) => {
     }
     const posts = await db.Post.findAll({
       where,
-      attributes: ['id', 'title', 'category', 'content', 'hit', 'status', 'createdAt', 'userId', 'like', 'numComments'],
+      attributes: [
+        'id',
+        'title',
+        'category',
+        'content',
+        'hit',
+        'status',
+        'createdAt',
+        'userId',
+        'like',
+        'coverImg',
+        'location',
+        'numPeople',
+        'numComments',
+      ],
       include: [
         {
           model: db.User,
@@ -61,7 +75,20 @@ exports.loadTrendingPosts = async (req, res, next) => {
     }
     const posts = await db.Post.findAll({
       where,
-      attributes: ['id', 'title', 'content', 'category', 'hit', 'status', 'createdAt', 'userId', 'like', 'numComments'],
+      attributes: [
+        'id',
+        'title',
+        'content',
+        'category',
+        'hit',
+        'status',
+        'createdAt',
+        'userId',
+        'like',
+        'numComments',
+        'coverImg',
+        'numPeople',
+      ],
       include: [
         {
           model: db.User,
@@ -245,7 +272,18 @@ exports.loadCategoryPosts = async (req, res, next) => {
     }
     const categoryPosts = await db.Post.findAll({
       where,
-      attributes: ['id', 'title', 'category', 'hit', 'status', 'createdAt', 'userId', 'like', 'numComments'],
+      attributes: [
+        'id',
+        'title',
+        'category',
+        'hit',
+        'status',
+        'createdAt',
+        'userId',
+        'like',
+        'numComments',
+        'numPeople',
+      ],
       include: [
         {
           model: db.User,
