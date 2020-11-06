@@ -1,6 +1,7 @@
 const db = require('../../models');
 const Sequelize = require('sequelize');
-const queryString = require('querystring');
+const qs = require('querystring');
+const {where} = require('sequelize');
 const Op = Sequelize.Op;
 const QueryTypes = Sequelize.QueryTypes;
 
@@ -210,7 +211,7 @@ exports.loadAllClosedPostsList = async (req, res, next) => {
     next(err);
   }
 };
-exports.loadHashtagsPosts = async (req, res, next) => {
+exports.loadHashtagPost = async (req, res, next) => {
   try {
     const name = req.params.name;
     let where = {};
@@ -249,6 +250,37 @@ exports.loadHashtagsPosts = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     return next(err);
+  }
+};
+
+exports.loadHashtagsPosts = async (req, res, next) => {
+  try {
+    const hashtags = req.query.tags;
+    const tags = hashtags.split(',');
+
+    // const result = db.Hashtag;
+    const result = await Promise.all(
+      tags.map(tag => {
+        return db.Hashtag.findAll({
+          where: {name: tag},
+          include: [
+            {
+              model: db.Post,
+              attributes: ['id', 'title'],
+            },
+          ],
+        });
+      }),
+    );
+    let arr = [];
+    result.forEach(item => {
+      arr = [].concat(arr, item);
+    });
+
+    res.json(arr);
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 };
 
