@@ -1,9 +1,8 @@
 const express = require('express');
-const user = require('../controllers/user');
-const { isLoggedIn, isNotLoggedIn, uploadProfileImage } = require('./middlewares');
+const user = require('./user.ctrl');
+const {isLoggedIn, isNotLoggedIn, uploadProfileImage} = require('../middlewares');
 
 const router = express.Router();
-
 
 /* 로그인 */
 router.post('/login', isNotLoggedIn, user.logIn);
@@ -17,7 +16,6 @@ router.post('/', isNotLoggedIn, user.signUp);
 /* 로그인 */
 router.post('/login', isNotLoggedIn, user.logIn);
 
-
 //로그아웃
 router.post('/logout', isLoggedIn, user.logOut);
 //비밀번호 변경
@@ -30,4 +28,4 @@ router.post('/updateProfile/:id', isLoggedIn, user.updateProfile);
 //특정 회원 정보 반환
 router.get('/:id', user.loadConnectionUser);
 
-module.exports = router
+module.exports = router;

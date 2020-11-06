@@ -1,6 +1,6 @@
-const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
+const {isLoggedIn, isNotLoggedIn} = require('../middlewares');
 const express = require('express');
-const comment = require('../controllers/comment');
+const comment = require('./comment.ctrl');
 
 const router = express.Router();
 

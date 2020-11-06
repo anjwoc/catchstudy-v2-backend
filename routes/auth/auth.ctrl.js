@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('../../models');
 const qs = require('querystring');
 require('dotenv').config();
 
