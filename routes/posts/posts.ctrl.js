@@ -258,7 +258,6 @@ exports.loadHashtagsPosts = async (req, res, next) => {
     const hashtags = req.query.tags;
     const tags = hashtags.split(',');
 
-    // const result = db.Hashtag;
     const result = await Promise.all(
       tags.map(tag => {
         return db.Hashtag.findAll({
@@ -272,12 +271,29 @@ exports.loadHashtagsPosts = async (req, res, next) => {
         });
       }),
     );
+
     let arr = [];
     result.forEach(item => {
-      arr = [].concat(arr, item);
+      const data = item[0].posts.map(post => {
+        return {id: post.id, title: post.title};
+      });
+      arr = [].concat(arr, data);
     });
 
-    res.json(arr);
+    // const ans = Array.from(new Set(arr));
+    const ans = [];
+    const map = new Map();
+    for (const item of arr) {
+      if (!map.has(item.id)) {
+        map.set(item.id, true);
+        ans.push({
+          id: item.id,
+          title: item.title,
+        });
+      }
+    }
+
+    res.json(ans);
   } catch (err) {
     console.error(err);
     next(err);

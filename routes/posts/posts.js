@@ -11,10 +11,6 @@ router.get('/search/:word', posts.searchPosts);
 router.get('/', posts.allPosts);
 router.get('/trendingPosts', posts.loadTrendingPosts);
 
-// 모든 해시태그들의 리스트를 반환한다.
-// 추후 별도의 라우터로 분리
-router.get('/allTags', posts.loadAllHashtags);
-
 /* 프로필 페이지 관련 라우터 */
 // 프로필 페이지에서 전체 게시글 리스트
 router.get('/:id/allPosts', posts.loadAllPostsList);
@@ -30,5 +26,8 @@ router.get('/categoryPosts', posts.loadCategoryPosts);
 // 하나의 게시물을 리턴하기 때문에 post 라우터로 옮겨야 함
 router.get('/tags', posts.loadHashtagsPosts);
 router.get('/tags/:name', posts.loadHashtagPost);
+// 모든 해시태그들의 리스트를 반환한다.
+// 추후 별도의 라우터로 분리
+router.get('/allTags', posts.loadAllHashtags);
 
 module.exports = router;
