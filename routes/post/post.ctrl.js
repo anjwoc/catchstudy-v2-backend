@@ -23,7 +23,7 @@ exports.addPost = async (req, res, next) => {
           }),
         ),
       );
-      await newPost.addHashtags(result.map(r => r[0]));
+      await newPost.addHashtag(result.map(r => r[0]));
     }
 
     if (req.body.image) {
@@ -98,7 +98,7 @@ exports.updatePost = async (req, res, next) => {
     // 만약 기존의 해시태그에서 줄어들었다면 filter로 삭제된 태그를 찾아서 디비에서 제거
     const deleteTags = tagHistory.filter(v => !hashtags.includes(v));
     if (deleteTags) {
-      const result = await updatedPost.removeHashtags(
+      const result = await updatedPost.removeHashtag(
         deleteTags.map(r => {
           db.Hashtag.destroy({
             where: {name: r},
@@ -114,7 +114,7 @@ exports.updatePost = async (req, res, next) => {
           }),
         ),
       );
-      await updatedPost.addHashtags(result.map(r => r[0]));
+      await updatedPost.addHashtag(result.map(r => r[0]));
     }
 
     if (image) {

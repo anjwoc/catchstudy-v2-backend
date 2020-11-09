@@ -17,7 +17,7 @@ exports.githubLogin = async (req, res, next) => {
           attributes: ['id'],
         },
         {
-          model: db.Sns,
+          model: db.Media,
           attributes: ['github', 'gmail', 'facebook', 'userId'],
         },
       ],

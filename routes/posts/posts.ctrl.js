@@ -280,7 +280,6 @@ exports.loadHashtagsPosts = async (req, res, next) => {
       arr = [].concat(arr, data);
     });
 
-    // const ans = Array.from(new Set(arr));
     const ans = [];
     const map = new Map();
     for (const item of arr) {

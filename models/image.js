@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       charset: 'utf8',
       collate: 'utf8_unicode_ci', // 한글 저장돼요
+      freezeTableName: true,
     },
   );
   Image.associate = db => {

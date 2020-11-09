@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       charset: 'utf8mb4',
       collate: 'utf8_unicode_ci',
+      freezeTableName: true,
     },
   );
   Hashtag.associate = db => {

@@ -1,11 +1,11 @@
 const db = require('../../models');
 
-exports.addSns = async (req, res, next) => {
+exports.addMedia = async (req, res, next) => {
   try {
     const id = req.params.id;
     const {github, gmail, facebook} = req.body;
 
-    await db.Sns.findOrCreate({
+    await db.Media.findOrCreate({
       where: {userId: id},
       defaults: {
         github: github,
@@ -19,7 +19,7 @@ exports.addSns = async (req, res, next) => {
       }
     });
 
-    await db.Sns.update(
+    await db.Media.update(
       {
         github: github,
         gmail: gmail,
@@ -30,7 +30,7 @@ exports.addSns = async (req, res, next) => {
       },
     );
 
-    await db.Sns.findOne({where: {userId: id}});
+    await db.Media.findOne({where: {userId: id}});
     return res.status(200);
   } catch (err) {
     console.error(err);

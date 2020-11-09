@@ -11,7 +11,9 @@ db.Comment = require('./comment')(sequelize, Sequelize);
 db.Hashtag = require('./hashtag')(sequelize, Sequelize);
 db.Reply = require('./reply')(sequelize, Sequelize);
 db.Image = require('./image')(sequelize, Sequelize);
-db.Sns = require('./sns')(sequelize, Sequelize);
+db.Media = require('./media')(sequelize, Sequelize);
+db.Room = require('./room')(sequelize, Sequelize);
+db.Chat = require('./chat')(sequelize, Sequelize);
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {

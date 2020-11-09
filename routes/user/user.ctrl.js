@@ -20,7 +20,7 @@ exports.loadConnectionUser = async (req, res, next) => {
       attributes: ['id', 'email', 'about', 'job', 'location', 'imgSrc', 'name'],
       include: [
         {
-          model: db.Sns,
+          model: db.Media,
           attributes: ['github', 'gmail', 'facebook', 'userId'],
         },
       ],
@@ -99,7 +99,7 @@ exports.signUp = async (req, res, next) => {
               attributes: ['id'],
             },
             {
-              model: db.Sns,
+              model: db.Media,
               attributes: ['github', 'gmail', 'facebook', 'userId'],
             },
           ],
@@ -141,7 +141,7 @@ exports.logIn = async (req, res, next) => {
             attributes: ['id'],
           },
           {
-            model: db.Sns,
+            model: db.Media,
             attributes: ['github', 'gmail', 'facebook', 'userId'],
           },
         ],

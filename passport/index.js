@@ -42,7 +42,7 @@ module.exports = () => {
             attributes: ['id'],
           },
           {
-            model: db.Sns,
+            model: db.Media,
             attributes: ['github', 'gmail', 'facebook', 'userId'],
           },
         ],

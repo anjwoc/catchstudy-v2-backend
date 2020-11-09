@@ -48,15 +48,17 @@ module.exports = (sequelize, DataTypes) => {
     {
       charset: 'utf8',
       collate: 'utf8_unicode_ci', //한글 저장
+      freezeTableName: true,
     },
   );
 
   User.associate = db => {
-    db.User.hasOne(db.Sns);
+    db.User.hasOne(db.Media);
+    db.User.hasMany(db.Room);
     db.User.hasMany(db.Post);
     db.User.hasMany(db.Comment);
-    db.User.belongsToMany(db.Post, {through: 'Like', as: 'Liked'});
     db.User.hasMany(db.Reply);
+    db.User.belongsToMany(db.Post, {through: 'Like', as: 'Liked'});
   };
   return User;
 };

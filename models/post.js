@@ -57,6 +57,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       charset: 'utf8',
       collate: 'utf8_unicode_ci', //한글 저장
+      freezeTableName: true,
     },
   );
 
