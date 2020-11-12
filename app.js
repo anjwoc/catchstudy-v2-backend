@@ -4,20 +4,22 @@ const passport = require('passport');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
-const prod = process.env.NODE_ENV === 'production';
 const hpp = require('hpp');
 const helmet = require('helmet');
+const axios = require('axios');
 const dotenv = require('dotenv');
-const flash = require('connect-flash');
-const ColorHash = require('color-hash');
 const db = require('./models');
 const routes = require('./routes');
-const webSocket = require('./socket');
+// const webSocket = require('./socket');
 const passportConfig = require('./passport');
+const {nextTick} = require('process');
+const prod = process.env.NODE_ENV === 'production';
 passportConfig();
 dotenv.config();
 
 const app = express();
+const server = require('http').createServer(app);
+// const io = require('socket.io')(server);
 
 db.sequelize.sync({force: false});
 
@@ -60,23 +62,15 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(sessionMiddleware);
-app.use(flash());
-app.use((req, res, next) => {
-  // 테스트 후 미들웨어 별도 분리
-  if (!req.session.color) {
-    const colorHash = new ColorHash();
-    req.session.color = colorHash.hex(req.sessionID);
-  }
-  next();
-});
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/', routes);
 
-const server = app.listen(app.get('port'), () => {
+server.listen(app.get('port'), () => {
   console.log(`Server is Listening on port ${app.get('port')}`);
 });
 
-webSocket(server, app, sessionMiddleware);
+// webSocket(io, app);
 
 // module.exports = app;

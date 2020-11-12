@@ -96,16 +96,19 @@ exports.updatePost = async (req, res, next) => {
     );
     const updatedPost = await db.Post.findOne({where: {id: req.params.id}});
     // 만약 기존의 해시태그에서 줄어들었다면 filter로 삭제된 태그를 찾아서 디비에서 제거
-    const deleteTags = tagHistory.filter(v => !hashtags.includes(v));
-    if (deleteTags) {
-      const result = await updatedPost.removeHashtag(
-        deleteTags.map(r => {
-          db.Hashtag.destroy({
-            where: {name: r},
-          });
-        }),
-      );
+    if (tagHistory) {
+      const deleteTags = tagHistory.filter(v => !hashtags.includes(v));
+      if (deleteTags) {
+        await updatedPost.removeHashtag(
+          deleteTags.map(r => {
+            db.Hashtag.destroy({
+              where: {name: r},
+            });
+          }),
+        );
+      }
     }
+
     if (hashtags) {
       const result = await Promise.all(
         hashtags.map(tag =>

@@ -18,8 +18,6 @@
     "aws-sdk": "^2.773.0",
     "axios": "^0.21.0",
     "bcrypt": "^5.0.0",
-    "color-hash": "^1.0.3",
-    "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

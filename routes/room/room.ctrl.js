@@ -12,15 +12,20 @@ exports.loadRooms = async (req, res, next) => {
 
 exports.createRoom = async (req, res, next) => {
   try {
+    // 접속 유저와 일치하는지 검사
+    // console.log(req.body);
+    const user = await db.User.findOne({where: req.body.userId});
     const newRoom = await db.Room.create({
       title: req.body.title,
-      maxNumber: req.body.maxNumber,
-      owner: req.body.owner,
-      password: req.body.owner,
+      owner: user.name,
     });
-    const io = req.app.get('io');
-    io.of('/room').emit('newRoom', newRoom);
-    res.redirect(`/room/${newRoom.id}?password=${req.body.password}`);
+    await user.addRoom(newRoom);
+    const roomId = newRoom.title;
+    // const io = req.app.get('io');
+    // const roomId = newRoom.title;
+    // io.to(roomId).emit('joinRoom', {user, newRoom});
+    // res.redirect(`http://localhost:3000/chat/${roomId}`);
+    res.json({user, roomId});
   } catch (err) {
     console.error(err);
     next(error);

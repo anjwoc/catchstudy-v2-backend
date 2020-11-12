@@ -1,60 +1,52 @@
-const SocketIO = require('socket.io');
+const io = require('socket.io');
 const axios = require('axios');
 
-module.exports = (server, app, sessionMiddleware) => {
-  const io = SocketIO(server);
+module.exports = (io, app) => {
+  const io = io(server);
   app.set('io', io);
 
-  const room = io.of('./room');
-  const chat = io.of('./chat');
+  io.on('connection', socket => {
+    console.log('Connect from Client');
 
-  io.use((socket, next) => {
-    sessionMiddleware(socket.request, socket.request.res, next);
-  });
-
-  room.on('connection', socket => {
-    console.log('Room namespace connected');
-    socket.on('disconnection', () => {});
-  });
-
-  chat.on('connection', socket => {
-    console.log('chat namespace connected');
-    const req = socket.request;
-    const {
-      headers: {referer},
-    } = req;
-    console.log(referer);
-    const roomId = referer.split('/')[referer.split('/').length - 1].replace(/\?.+/, '');
-    console.log(roomId);
-    socket.join(roomId);
-
-    socket.to(roomId).emit('join', {
-      user: 'system',
-      chat: `${req.session.color}님이 입장하셨습니다.`,
+    socket.on('hello', data => {
+      console.log('hello from Client: ' + data);
     });
 
-    socket.on('disconnection', () => {
-      console.log('chat namespace disconnection');
-      socket.leave(roomId);
+    socket.on('chatRoom', payload => {
+      // 클라이언트에게 메시지를 전송한다
+      console.log('chatRoom');
+      // socket.emit('newMessage', data);
+    });
 
-      const currentRoom = socket.adapter.rooms[roomId];
-      const userCount = currentRoom ? currentRoom.length : 0;
+    socket.on('joinRoom', roomId => {
+      console.log('--------joinRoom--------');
 
-      if (userCount === 0) {
-        axios
-          .delete(`http://localhost:3000/room/${roomId}`)
-          .then(() => {
-            console.log('방 제거 요청 성공');
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      } else {
-        socket.to(roomId).emit('exit', {
-          user: 'system',
-          chat: `${req.session.color} 님이 퇴장하셨습니다.`,
-        });
+      socket.join(roomId);
+      // io.to(roomId).emit('updateUsers', user);
+      socket.emit('newMeesage', 'Hello Admin');
+      socket.broadcast.to(roomId).emit('admin USER_NAME connected to chat');
+    });
+
+    socket.on('chat', payload => {
+      const {roomId, msg} = payload;
+      console.log(roomId);
+      console.log('message from Client: ' + msg);
+
+      socket.to(roomId).emit(msg);
+      // 클라이언트에게 메시지를 전송한다
+      socket.emit('newMessage', msg);
+    });
+
+    socket.on('createMessage', user => {
+      // const user = db.User.findOne({where: user.id});
+
+      if (user) {
+        io.to(user.roomName).emit('newMessage');
       }
+    });
+
+    socket.on('disconnect', () => {
+      console.log('disconnect');
     });
   });
 };

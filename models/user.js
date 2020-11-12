@@ -59,6 +59,7 @@ module.exports = (sequelize, DataTypes) => {
     db.User.hasMany(db.Comment);
     db.User.hasMany(db.Reply);
     db.User.belongsToMany(db.Post, {through: 'Like', as: 'Liked'});
+    db.User.belongsToMany(db.Room, {through: 'UserRooms'});
   };
   return User;
 };

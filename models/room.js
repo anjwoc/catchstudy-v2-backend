@@ -5,6 +5,9 @@ module.exports = (sequelize, DataTypes) => {
       title: {
         type: DataTypes.STRING(30),
         allowNull: false,
+        validate: {
+          len: [3, 20],
+        },
       },
       maxNumber: {
         type: DataTypes.INTEGER,
@@ -30,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     db.Room.belongsTo(db.User);
     db.Room.hasMany(db.Chat);
     db.Room.belongsToMany(db.Chat, {through: 'ChatRoom'});
+    db.Room.belongsToMany(db.User, {through: 'UserRooms'});
   };
 
   return Room;
