@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       type: {
         type: DataTypes.ENUM,
         allowNull: false,
-        values: ['online', 'offline'],
+        values: ['온라인', '오프라인'],
       },
       category: {
         type: DataTypes.ENUM,
@@ -41,6 +41,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 0,
+      },
+      questions: {
+        type: DataTypes.JSON,
+        allowNull: true,
       },
       hit: {
         // 조회수 속성

@@ -2,7 +2,7 @@ const db = require('../../models');
 
 exports.addPost = async (req, res, next) => {
   try {
-    const {title, content, location, hashtags, category, type, numPeople, coverImg} = req.body;
+    const {title, content, location, hashtags, category, type, numPeople, coverImg, questions} = req.body;
     const newPost = await db.Post.create({
       title: title,
       content: content,
@@ -11,6 +11,7 @@ exports.addPost = async (req, res, next) => {
       category: category,
       type: type,
       numPeople: numPeople,
+      questions: questions,
       userId: req.user.id,
       hit: 1,
     });

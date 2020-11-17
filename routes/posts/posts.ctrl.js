@@ -272,6 +272,8 @@ exports.loadHashtagsPosts = async (req, res, next) => {
       }),
     );
 
+    // if (result.length > 0) res.json({});
+
     let arr = [];
     result.forEach(item => {
       const data = item[0].posts.map(post => {
