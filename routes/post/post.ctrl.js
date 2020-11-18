@@ -81,13 +81,14 @@ exports.deletePost = async (req, res, next) => {
 
 exports.updatePost = async (req, res, next) => {
   try {
-    const {title, content, location, hashtags, tagHistory, category, image} = req.body;
+    const {title, content, location, hashtags, tagHistory, category, image, questions} = req.body;
     await db.Post.update(
       {
         title: title,
         content: content,
         location: location,
         category: category,
+        questions: questions,
       },
       {
         where: {
