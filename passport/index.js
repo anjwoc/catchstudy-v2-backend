@@ -35,7 +35,7 @@ module.exports = () => {
       }
       const user = await db.User.findOne({
         where,
-        attributes: ['id', 'email', 'name', 'about', 'job', 'location', 'imgSrc'],
+        attributes: ['id', 'email', 'name', 'about', 'job', 'location', 'imgSrc', 'socialType', 'createdAt'],
         include: [
           {
             model: db.Post,

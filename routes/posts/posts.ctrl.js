@@ -272,8 +272,6 @@ exports.loadHashtagsPosts = async (req, res, next) => {
       }),
     );
 
-    // if (result.length > 0) res.json({});
-
     let arr = [];
     result.forEach(item => {
       const data = item[0].posts.map(post => {
@@ -282,19 +280,19 @@ exports.loadHashtagsPosts = async (req, res, next) => {
       arr = [].concat(arr, data);
     });
 
-    const ans = [];
+    const posts = [];
     const map = new Map();
     for (const item of arr) {
       if (!map.has(item.id)) {
         map.set(item.id, true);
-        ans.push({
+        posts.push({
           id: item.id,
           title: item.title,
         });
       }
     }
 
-    res.json(ans);
+    res.json(posts);
   } catch (err) {
     console.error(err);
     next(err);
@@ -303,20 +301,19 @@ exports.loadHashtagsPosts = async (req, res, next) => {
 
 exports.loadCategoryPosts = async (req, res, next) => {
   try {
-    const item = req.query.item;
+    const category = req.query.category;
     const lastId = req.query.lastId;
-
-    if (!item) {
+    if (!category) {
       res.status(403).send('카테고리 분류가 없습니다.');
     }
 
-    let where = {category: item};
+    let where = {category: category};
     if (parseInt(lastId, 10)) {
       where = {
         id: {
           [db.Sequelize.Op.lt]: parseInt(lastId, 10),
         },
-        category: item,
+        category: category,
       };
     }
     const categoryPosts = await db.Post.findAll({
@@ -324,22 +321,22 @@ exports.loadCategoryPosts = async (req, res, next) => {
       attributes: [
         'id',
         'title',
+        'coverImg',
         'category',
+        'content',
+        'location',
         'hit',
         'status',
-        'createdAt',
         'userId',
         'like',
         'numComments',
         'numPeople',
+        'createdAt',
       ],
       include: [
         {
           model: db.User,
           attributes: ['id', 'email', 'name', 'imgSrc'],
-        },
-        {
-          model: db.Image,
         },
         {
           model: db.Hashtag,

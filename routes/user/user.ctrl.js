@@ -134,7 +134,7 @@ exports.logIn = async (req, res, next) => {
       }
       const fullUser = await db.User.findOne({
         where: {id: user.id},
-        attributes: ['id', 'email', 'name', 'about', 'job', 'location', 'imgSrc'],
+        attributes: ['id', 'email', 'name', 'about', 'job', 'location', 'imgSrc', 'createdAt', 'socialType'],
         include: [
           {
             model: db.Post,
@@ -173,7 +173,6 @@ exports.uploadProfileImage = async (req, res, next) => {
       res.status(404).send('회원이 존재하지 않습니다');
     }
     if (req.files.image) {
-      //일단 개발 중엔 하드코딩하고 나중에 dotenv로 가저올 예정
       const path = req.files.image[0].location;
       if (filename !== user.dataValues.imgSrc && path) {
         await db.User.update(
@@ -196,19 +195,20 @@ exports.uploadProfileImage = async (req, res, next) => {
 // 프로필을 업데이트하는 컨트롤러
 exports.updateProfile = async (req, res, next) => {
   try {
-    let {job, about, location, imgSrc} = req.body;
+    let {job, about, location} = req.body;
+    console.log(req.body);
+
     await db.User.update(
       {
         job: job,
         location: location,
         about: about,
-        imgSrc: imgSrc,
       },
       {
         where: {id: req.params.id},
       },
     );
-    res.status(200);
+    res.status(200).send('프로필 변경 성공');
   } catch (err) {
     console.error(err);
   }

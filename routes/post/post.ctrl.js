@@ -176,23 +176,6 @@ exports.uploadImage = (req, res, next) => {
 
 exports.uploadThumbnail = async (req, res, next) => {
   try {
-    // const post = await db.Post.findOne({where: {id: req.body.postId}});
-    // if (!post) {
-    //   res.status(404).send('존재하지 않는 게시글입니다.');
-    // }
-    // if (req.file.image) {
-    //   const path = req.file.image.location;
-    //   await db.Post.update(
-    //     {
-    //       coverImg: path,
-    //     },
-    //     {
-    //       where: {id: req.body.postId},
-    //     },
-    //   );
-    //   return res.status(304).send('No Change');
-    // }
-
     return res.json(req.file.location);
   } catch (err) {
     console.error(err);

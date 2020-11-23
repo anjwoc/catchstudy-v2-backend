@@ -20,7 +20,7 @@ router.get('/:id/allRecruitingPosts', posts.loadAllRecruitingPostsList);
 router.get('/:id/allClosedPosts', posts.loadAllClosedPostsList);
 
 /* 카테고리 관련 라우터 */
-router.get('/categoryPosts', posts.loadCategoryPosts);
+router.get('/category', posts.loadCategoryPosts);
 
 /* 해시태그 게시물 라우터 */
 // 하나의 게시물을 리턴하기 때문에 post 라우터로 옮겨야 함
