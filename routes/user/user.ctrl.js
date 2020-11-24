@@ -172,9 +172,10 @@ exports.uploadProfileImage = async (req, res, next) => {
     if (!user) {
       res.status(404).send('회원이 존재하지 않습니다');
     }
+
     if (req.files.image) {
       const path = req.files.image[0].location;
-      if (filename !== user.dataValues.imgSrc && path) {
+      if (path) {
         await db.User.update(
           {
             imgSrc: path,
