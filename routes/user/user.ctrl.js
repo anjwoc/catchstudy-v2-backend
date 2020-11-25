@@ -197,7 +197,6 @@ exports.uploadProfileImage = async (req, res, next) => {
 exports.updateProfile = async (req, res, next) => {
   try {
     let {job, about, location} = req.body;
-    console.log(req.body);
 
     await db.User.update(
       {
@@ -209,6 +208,7 @@ exports.updateProfile = async (req, res, next) => {
         where: {id: req.params.id},
       },
     );
+
     res.status(200).send('프로필 변경 성공');
   } catch (err) {
     console.error(err);

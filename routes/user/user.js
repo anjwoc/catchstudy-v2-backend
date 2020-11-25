@@ -23,7 +23,7 @@ router.post('/password', isLoggedIn, user.updatePassword);
 //프로필 이미지 변경 or 추가
 router.post('/image', uploadProfileImage.fields([{name: 'image'}, {name: 'userId'}]), user.uploadProfileImage);
 //프로필 정보 업데이트
-router.post('/updateProfile/:id', isLoggedIn, user.updateProfile);
+router.post('/update/:id', isLoggedIn, user.updateProfile);
 
 //특정 회원 정보 반환
 router.get('/:id', user.loadConnectionUser);
