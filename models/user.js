@@ -28,14 +28,17 @@ module.exports = (sequelize, DataTypes) => {
       },
       about: {
         type: DataTypes.STRING(200),
+        defaultValue: '',
         allowNull: false,
       },
       job: {
         type: DataTypes.STRING(30),
+        defaultValue: '',
         allowNull: true,
       },
       location: {
         type: DataTypes.STRING(30),
+        defaultValue: '',
         allowNull: true,
       },
       imgSrc: {

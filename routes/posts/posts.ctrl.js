@@ -257,7 +257,6 @@ exports.loadHashtagsPosts = async (req, res, next) => {
   try {
     const hashtags = req.query.tags;
     const tags = hashtags.split(',');
-
     const result = await Promise.all(
       tags.map(tag => {
         return db.Hashtag.findAll({

@@ -7,6 +7,7 @@ const router = express.Router();
 /* 로그인 */
 router.post('/login', isNotLoggedIn, user.logIn);
 
+router.delete('/:id', isLoggedIn, user.deleteAccount);
 //접속 유저 정보 반환(로그인 유지할 때 사용)
 router.get('/', isLoggedIn, user.loadUser);
 

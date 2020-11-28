@@ -11,6 +11,7 @@ exports.addComment = async (req, res, next) => {
       postId: post.id,
       userId: req.user.id,
       content: req.body.content,
+      isPrivate: req.body.isPrivate,
     });
     const comment = await db.Comment.findOne({
       where: {

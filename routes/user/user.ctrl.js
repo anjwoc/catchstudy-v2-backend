@@ -64,10 +64,7 @@ exports.signUp = async (req, res, next) => {
     });
     if (exUser) {
       //이미 회원가입한 사람
-      return res.status(403).json({
-        errorCode: 1,
-        message: '이미 회원가입되어있습니다.',
-      });
+      return res.status(403).sned('이미 가입된 회원입니다.');
     }
     await db.User.create({
       email: req.body.email,
@@ -92,7 +89,7 @@ exports.signUp = async (req, res, next) => {
         }
         const fullUser = await db.User.findOne({
           where: {id: user.id},
-          attributes: ['id', 'email', 'name', 'about', 'job', 'location', 'imgSrc'],
+          attributes: ['id', 'email', 'name', 'about', 'job', 'location', 'imgSrc', 'createdAt', 'socialType'],
           include: [
             {
               model: db.Post,
@@ -210,6 +207,22 @@ exports.updateProfile = async (req, res, next) => {
     );
 
     res.status(200).send('프로필 변경 성공');
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+exports.deleteAccount = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    await db.User.destroy({
+      where: {id: userId},
+    });
+    return await Promise.all([
+      req.logout(),
+      req.session.destroy(), // 선택사항
+      res.clearCookie('connect.sid', {path: '/'}).status(200).send('로그아웃 되었습니다.'),
+    ]);
   } catch (err) {
     console.error(err);
   }

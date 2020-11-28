@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false, // 필수
       },
       coverImg: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING(200),
         allowNull: true,
       },
       type: {

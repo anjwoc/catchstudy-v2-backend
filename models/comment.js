@@ -6,6 +6,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT, //긴글
         allowNull: false,
       },
+      isPrivate: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
     },
     {
       charset: 'utf8',
