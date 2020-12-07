@@ -6,13 +6,11 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const hpp = require('hpp');
 const helmet = require('helmet');
-const axios = require('axios');
 const dotenv = require('dotenv');
 const db = require('./models');
 const routes = require('./routes');
 // const webSocket = require('./socket');
 const passportConfig = require('./passport');
-const {nextTick} = require('process');
 const prod = process.env.NODE_ENV === 'production';
 passportConfig();
 dotenv.config();
@@ -50,7 +48,7 @@ if (prod) {
   app.use(morgan('dev'));
   app.use(
     cors({
-      origin: 'http://localhost:3000',
+      origin: 'http://anjwoc.iptime.org:3000',
       credentials: true,
     }),
   );

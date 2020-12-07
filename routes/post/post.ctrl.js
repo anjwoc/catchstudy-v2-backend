@@ -177,7 +177,8 @@ exports.uploadImage = (req, res, next) => {
 exports.uploadThumbnail = async (req, res, next) => {
   try {
     const image = req.file.location;
-    return res.json(image.replace('original', 'thumb'));
+    // return res.json(image.replace('original', 'thumb'));
+    return res.json(image);
   } catch (err) {
     console.error(err);
   }

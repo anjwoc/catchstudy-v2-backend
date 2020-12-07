@@ -4,10 +4,16 @@ const multerS3 = require('multer-s3');
 const path = require('path');
 require('dotenv').config();
 
+AWS.config.update({
+  region: 'ap-northeast-2',
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+});
+
 exports.uploadProfileImage = multer({
   storage: multerS3({
     s3: new AWS.S3(),
-    bucket: 'catchdev-bucket',
+    bucket: 'catch-study-bucket',
     acl: 'public-read', // 클라이언트에서 자유롭게 사용하기 위함
     key(req, file, cb) {
       cb(null, `original/profile/${Date.now()}-${path.basename(file.originalname)}`);
@@ -19,7 +25,7 @@ exports.uploadProfileImage = multer({
 exports.upload = multer({
   storage: multerS3({
     s3: new AWS.S3(),
-    bucket: 'catchdev-bucket',
+    bucket: 'catch-study-bucket',
     acl: 'public-read', // 클라이언트에서 자유롭게 사용하기 위함
     key(req, file, cb) {
       cb(null, `original/${Date.now()}-${path.basename(file.originalname)}`);
