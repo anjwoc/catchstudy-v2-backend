@@ -181,7 +181,10 @@ exports.uploadProfileImage = async (req, res, next) => {
             where: {id: req.body.userId},
           },
         );
-        return res.json(path);
+        return res.json({
+          path: path,
+          msg: '프로필 이미지를 변경했습니다.',
+        });
       }
     }
     return res.json('No Change');

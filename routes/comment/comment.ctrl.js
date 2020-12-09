@@ -2,14 +2,18 @@ const db = require('../../models');
 
 exports.addComment = async (req, res, next) => {
   try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).send('로그인 후 이용이 가능합니다.');
+    }
     const post = await db.Post.findOne({where: {id: req.params.id}});
     if (!post) {
       return res.status(404).send('포스트가 존재하지 않습니다.');
     }
-    post.increment('numComments');
+
     const newComment = await db.Comment.create({
       postId: post.id,
-      userId: req.user.id,
+      userId: user.id,
       content: req.body.content,
       isPrivate: req.body.isPrivate,
     });
@@ -24,6 +28,7 @@ exports.addComment = async (req, res, next) => {
         },
       ],
     });
+    post.increment('numComments');
     return res.json(comment);
   } catch (err) {
     console.error(err);
