@@ -40,7 +40,8 @@ if (prod) {
   app.use(morgan('combined'));
   app.use(
     cors({
-      origin: /delog\.net$/,
+      // origin: /delog\.net$/,
+      origin: 'http://anjwoc.iptime.org:3000',
       credentials: true,
     }),
   );
