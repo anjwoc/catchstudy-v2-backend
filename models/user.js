@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       about: {
         type: DataTypes.STRING(200),
         defaultValue: '',
-        allowNull: false,
+        allowNull: true,
       },
       job: {
         type: DataTypes.STRING(30),

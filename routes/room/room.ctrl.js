@@ -13,7 +13,6 @@ exports.loadRooms = async (req, res, next) => {
 exports.createRoom = async (req, res, next) => {
   try {
     // 접속 유저와 일치하는지 검사
-    // console.log(req.body);
     const user = await db.User.findOne({where: req.body.userId});
     const newRoom = await db.Room.create({
       title: req.body.title,

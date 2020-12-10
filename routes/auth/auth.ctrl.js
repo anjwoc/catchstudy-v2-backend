@@ -1,5 +1,4 @@
 const db = require('../../models');
-const qs = require('querystring');
 require('dotenv').config();
 
 exports.githubLogin = async (req, res, next) => {
@@ -46,10 +45,6 @@ exports.githubCallback = async (req, res, next) => {
       job: data._json.company,
     };
 
-    const query = qs.stringify({
-      email: userInfo.email,
-      socialType: 'github',
-    });
     const exUser = await db.User.findOne({
       where: {
         email: userInfo.email,
@@ -67,6 +62,10 @@ exports.githubCallback = async (req, res, next) => {
         job: userInfo.job,
       });
       return res.redirect(`${process.env.CLIENT_HOST}`);
+    } else {
+      // 가입한 다른 소셜 계정의 이메일이 같은 경우
+      const msg = encodeURIComponent('이미 가입된 이메일 계정입니다.');
+      return res.redirect(`${process.env.CLIENT_HOST}/login?error=${msg}`);
     }
     await db.User.findOrCreate({
       where: {openId: userInfo.id},
