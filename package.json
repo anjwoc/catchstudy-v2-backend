@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "start": "NODE_ENV=production pm2 start --name back app.js",
+    "docker": "NODE_ENV=production pm2 start --name back app.js",
+    "start": "NODE_ENV=production node app.js",
     "debug": "nodemon --inspect ./app.js"
   },
   "keywords": [],
