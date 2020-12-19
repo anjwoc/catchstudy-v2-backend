@@ -41,7 +41,7 @@ if (prod) {
   app.use(
     cors({
       // origin: /delog\.net$/,
-      origin: "http://anjwoc.iptime.org:3000",
+      origin: ["http://catchstudy.online", "https://catchstudy.online"],
       credentials: true,
     }),
   );
