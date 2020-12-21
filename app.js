@@ -16,7 +16,7 @@ passportConfig();
 dotenv.config();
 
 const app = express();
-const server = require("http").createServer(app);
+// const server = require("http").createServer(app);
 // const io = require('socket.io')(server);
 
 db.sequelize.sync({force: false});
@@ -72,3 +72,9 @@ app.use("/", routes);
 
 // webSocket(io, app);
 module.exports = app;
+
+if (require.main === module) {
+  app.listen(app.get("port"), "0.0.0.0", () => {
+    console.log(`server listening on http://0.0.0.0:${app.get("port")}`);
+  });
+}
