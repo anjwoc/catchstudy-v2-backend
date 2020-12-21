@@ -66,9 +66,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use("/", routes);
 
-server.listen(app.get("port"), () => {
-  console.log(`Server is Listening on port ${app.get("port")}`);
-});
+// server.listen(app.get("port"), () => {
+//   console.log(`Server is Listening on port ${app.get("port")}`);
+// });
 
 // webSocket(io, app);
-// module.exports = app;
+module.exports = app;
