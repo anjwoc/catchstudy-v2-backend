@@ -1,9 +1,5 @@
-const db = require('../../models');
-const Sequelize = require('sequelize');
-const qs = require('querystring');
-const {where} = require('sequelize');
-const Op = Sequelize.Op;
-const QueryTypes = Sequelize.QueryTypes;
+const db = require("../../models");
+const Sequelize = require("sequelize");
 
 exports.allPosts = async (req, res, next) => {
   try {
@@ -20,40 +16,40 @@ exports.allPosts = async (req, res, next) => {
     const posts = await db.Post.findAll({
       where,
       attributes: [
-        'id',
-        'title',
-        'category',
-        'content',
-        'hit',
-        'status',
-        'createdAt',
-        'userId',
-        'like',
-        'coverImg',
-        'location',
-        'numPeople',
-        'numComments',
+        "id",
+        "title",
+        "category",
+        "content",
+        "hit",
+        "status",
+        "createdAt",
+        "userId",
+        "like",
+        "coverImg",
+        "location",
+        "numPeople",
+        "numComments",
       ],
       include: [
         {
           model: db.User,
-          attributes: ['id', 'email', 'name', 'imgSrc'],
+          attributes: ["id", "email", "name", "imgSrc"],
         },
         {
           model: db.Image,
         },
         {
           model: db.User,
-          as: 'Likers',
-          attributes: ['id'],
+          as: "Likers",
+          attributes: ["id"],
         },
         {
           model: db.Hashtag,
-          as: 'hashtags',
-          attributes: ['name'],
+          as: "hashtags",
+          attributes: ["name"],
         },
       ],
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
       limit: parseInt(req.query.limit, 10) || 10,
     });
     res.json(posts);
@@ -77,56 +73,42 @@ exports.loadTrendingPosts = async (req, res, next) => {
     const posts = await db.Post.findAll({
       where,
       attributes: [
-        'id',
-        'title',
-        'content',
-        'category',
-        'hit',
-        'status',
-        'createdAt',
-        'userId',
-        'like',
-        'numComments',
-        'coverImg',
-        'numPeople',
+        "id",
+        "title",
+        "content",
+        "category",
+        "hit",
+        "status",
+        "createdAt",
+        "userId",
+        "like",
+        "numComments",
+        "coverImg",
+        "numPeople",
       ],
       include: [
         {
           model: db.User,
-          attributes: ['id', 'email', 'name', 'imgSrc'],
+          attributes: ["id", "email", "name", "imgSrc"],
         },
         {
           model: db.Image,
         },
         {
           model: db.User,
-          as: 'Likers',
-          attributes: ['id'],
+          as: "Likers",
+          attributes: ["id"],
         },
         {
           model: db.Hashtag,
-          as: 'hashtags',
-          attributes: ['name'],
+          as: "hashtags",
+          attributes: ["name"],
         },
       ],
-      order: [['like', 'DESC']],
+      order: [["like", "DESC"]],
       limit: parseInt(req.query.limit, 10) || 10,
     });
     res.json(posts);
-  } catch (err) {
-    console.error(err);
-    return next(err);
-  }
-};
-
-// 모든 해시태그들의 리스트를 반환한다.
-exports.loadAllHashtags = async (req, res, next) => {
-  try {
-    // const tags = await db.Hashtag.findAll({
-    //   attributes: ['name']
-    // });
-    const tags = await db.sequelize.query('SELECT name FROM hashtags', {type: QueryTypes.SELECT});
-    return res.json(tags);
   } catch (err) {
     console.error(err);
     return next(err);
@@ -146,7 +128,7 @@ exports.loadAllPostsList = async (req, res, next) => {
     }
     const posts = await db.Post.findAll({
       where,
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
       limit: parseInt(req.query.limit, 10) || 10,
     });
     res.json(posts);
@@ -160,7 +142,7 @@ exports.loadAllRecruitingPostsList = async (req, res, next) => {
   try {
     let where = {
       userId: req.params.id,
-      status: 'open',
+      status: "open",
     };
     if (parseInt(req.query.lastId, 10)) {
       where = {
@@ -168,13 +150,13 @@ exports.loadAllRecruitingPostsList = async (req, res, next) => {
           [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10),
         },
         userId: req.params.id,
-        status: 'open',
+        status: "open",
       };
     }
 
     const posts = await db.Post.findAll({
       where,
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
       limit: parseInt(req.query.limit, 10) || 10,
     });
     res.json(posts);
@@ -188,7 +170,7 @@ exports.loadAllClosedPostsList = async (req, res, next) => {
   try {
     let where = {
       userId: req.params.id,
-      status: 'closed',
+      status: "closed",
     };
     if (parseInt(req.query.lastId, 10)) {
       where = {
@@ -196,13 +178,13 @@ exports.loadAllClosedPostsList = async (req, res, next) => {
           [db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10),
         },
         userId: req.params.id,
-        status: 'closed',
+        status: "closed",
       };
     }
 
     const posts = await db.Post.findAll({
       where,
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
       limit: parseInt(req.query.limit, 10) || 10,
     });
     res.json(posts);
@@ -228,21 +210,21 @@ exports.loadHashtagPost = async (req, res, next) => {
         include: [
           {
             model: db.User,
-            attributes: ['id', 'email', 'name', 'imgSrc'],
+            attributes: ["id", "email", "name", "imgSrc"],
           },
           {
             model: db.Image,
           },
           {
             model: db.Hashtag,
-            as: 'hashtags',
+            as: "hashtags",
             where: {name: name},
-            attributes: ['name'],
+            attributes: ["name"],
           },
         ],
       },
       {
-        order: [['createdAt', 'DESC']],
+        order: [["createdAt", "DESC"]],
         limit: parseInt(req.query.limit, 10) || 10,
       },
     );
@@ -256,7 +238,7 @@ exports.loadHashtagPost = async (req, res, next) => {
 exports.loadHashtagsPosts = async (req, res, next) => {
   try {
     const hashtags = req.query.tags;
-    const tags = hashtags.split(',');
+    const tags = hashtags.split(",");
     const result = await Promise.all(
       tags.map(tag => {
         return db.Hashtag.findAll({
@@ -264,7 +246,7 @@ exports.loadHashtagsPosts = async (req, res, next) => {
           include: [
             {
               model: db.Post,
-              attributes: ['id', 'title'],
+              attributes: ["id", "title"],
             },
           ],
         });
@@ -303,7 +285,7 @@ exports.loadCategoryPosts = async (req, res, next) => {
     const category = req.query.category;
     const lastId = req.query.lastId;
     if (!category) {
-      res.status(403).send('카테고리 분류가 없습니다.');
+      res.status(403).send("카테고리 분류가 없습니다.");
     }
 
     let where = {category: category};
@@ -318,32 +300,32 @@ exports.loadCategoryPosts = async (req, res, next) => {
     const categoryPosts = await db.Post.findAll({
       where,
       attributes: [
-        'id',
-        'title',
-        'coverImg',
-        'category',
-        'content',
-        'location',
-        'hit',
-        'status',
-        'userId',
-        'like',
-        'numComments',
-        'numPeople',
-        'createdAt',
+        "id",
+        "title",
+        "coverImg",
+        "category",
+        "content",
+        "location",
+        "hit",
+        "status",
+        "userId",
+        "like",
+        "numComments",
+        "numPeople",
+        "createdAt",
       ],
       include: [
         {
           model: db.User,
-          attributes: ['id', 'email', 'name', 'imgSrc'],
+          attributes: ["id", "email", "name", "imgSrc"],
         },
         {
           model: db.Hashtag,
-          as: 'hashtags',
-          attributes: ['name'],
+          as: "hashtags",
+          attributes: ["name"],
         },
       ],
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
       limit: parseInt(req.query.limit, 10) || 10,
     });
     res.json(categoryPosts);
@@ -374,20 +356,20 @@ exports.searchPosts = async (req, res, next) => {
       include: [
         {
           model: db.User,
-          attributes: ['id', 'email', 'name', 'imgSrc'],
+          attributes: ["id", "email", "name", "imgSrc"],
         },
         {
           model: db.Image,
         },
         {
           model: db.User,
-          as: 'Likers',
-          attributes: ['id'],
+          as: "Likers",
+          attributes: ["id"],
         },
         {
           model: db.Hashtag,
-          as: 'hashtags',
-          attributes: ['name'],
+          as: "hashtags",
+          attributes: ["name"],
         },
       ],
     });
