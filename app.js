@@ -66,15 +66,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use("/", routes);
 
-// server.listen(app.get("port"), () => {
-//   console.log(`Server is Listening on port ${app.get("port")}`);
-// });
+server.listen(app.get("port"), () => {
+  console.log(`Server is Listening on port ${app.get("port")}`);
+});
 
 // webSocket(io, app);
 module.exports = app;
-
-if (require.main === module) {
-  app.listen(app.get("port"), "0.0.0.0", () => {
-    console.log(`server listening on http://0.0.0.0:${app.get("port")}`);
-  });
-}

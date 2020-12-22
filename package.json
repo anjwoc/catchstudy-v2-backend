@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon app.js",
     "docker": "NODE_ENV=production pm2 start --name back app.js",
-    "start": "NODE_ENV=production PORT=4550 node server.js",
+    "start": "NODE_ENV=production PORT=4550 node app.js",
     "debug": "nodemon --inspect ./app.js"
   },
   "keywords": [],
