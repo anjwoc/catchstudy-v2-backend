@@ -4,7 +4,7 @@ const posts = require("./posts.ctrl");
 
 const router = express.Router();
 
-/* 검색 기능 */
+/* 세부 검색 기능 */
 router.get("/search/:word", posts.searchPosts);
 
 /* 메인 페이지, 인기 페이지 라우터 */

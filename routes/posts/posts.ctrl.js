@@ -1,5 +1,7 @@
 const db = require("../../models");
 const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
+const QueryTypes = Sequelize.QueryTypes;
 
 exports.allPosts = async (req, res, next) => {
   try {
@@ -262,10 +264,10 @@ exports.loadHashtagsPosts = async (req, res, next) => {
     });
 
     const posts = [];
-    const map = new Map();
+    const postsMap = new Map();
     for (const item of arr) {
-      if (!map.has(item.id)) {
-        map.set(item.id, true);
+      if (!postsMap.has(item.id)) {
+        postsMap.set(item.id, true);
         posts.push({
           id: item.id,
           title: item.title,
@@ -335,22 +337,52 @@ exports.loadCategoryPosts = async (req, res, next) => {
   }
 };
 
+/* 일반 단어 검색, 해시태그 조건 검색, 지역 조건 검색 */
 exports.searchPosts = async (req, res, next) => {
   try {
     const word = req.params.word;
     const lastId = req.query.lastId;
+    const tags = req.query.tags;
+    const location = req.query.location;
     let where = {
       title: {
         [Op.like]: `%${word}%`,
       },
     };
     if (parseInt(lastId, 10)) {
-      where.push({
+      where = Object.assign(where, {
         id: {
           [Op.lt]: parseInt(lastId, 10),
         },
       });
     }
+    // if (location) {
+    //   where = Object.assign(where, {
+    //     location: location,
+    //   });
+    // }
+    let tagConditon = {};
+    if (tags) {
+      tagCondition = Object.assign(tagConditon, {
+        name: {
+          [Op.or]: tags.split(","),
+        },
+      });
+    }
+
+    // const result = await db.Post.findAll({
+    //   include: [
+    //     {
+    //       model: db.Hashtag,
+    //       where: {
+    //         name: {
+    //           [Op.or]: tags,
+    //         },
+    //       },
+    //     },
+    //   ],
+    // });
+
     const searchPosts = await db.Post.findAll({
       where,
       include: [
@@ -369,10 +401,12 @@ exports.searchPosts = async (req, res, next) => {
         {
           model: db.Hashtag,
           as: "hashtags",
+          where: tagConditon,
           attributes: ["name"],
         },
       ],
     });
+
     return res.json(searchPosts);
   } catch (err) {
     console.error(err);
