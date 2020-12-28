@@ -1,7 +1,7 @@
-require('dotenv').config();
+require("dotenv").config();
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
-    'user',
+    "user",
     {
       email: {
         type: DataTypes.STRING(40), //40자 이내
@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       socialType: {
         type: DataTypes.ENUM,
-        values: ['github', 'google', 'facebook'],
+        values: ["github", "google", "facebook"],
         allowNull: true,
       },
       password: {
@@ -28,17 +28,17 @@ module.exports = (sequelize, DataTypes) => {
       },
       about: {
         type: DataTypes.STRING(200),
-        defaultValue: '',
+        defaultValue: "",
         allowNull: true,
       },
       job: {
         type: DataTypes.STRING(30),
-        defaultValue: '',
+        defaultValue: "",
         allowNull: true,
       },
       location: {
         type: DataTypes.STRING(30),
-        defaultValue: '',
+        defaultValue: "",
         allowNull: true,
       },
       imgSrc: {
@@ -49,8 +49,8 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      charset: 'utf8',
-      collate: 'utf8_unicode_ci', //한글 저장
+      charset: "utf8",
+      collate: "utf8_unicode_ci", //한글 저장
       freezeTableName: true,
     },
   );
@@ -61,8 +61,8 @@ module.exports = (sequelize, DataTypes) => {
     db.User.hasMany(db.Post);
     db.User.hasMany(db.Comment);
     db.User.hasMany(db.Reply);
-    db.User.belongsToMany(db.Post, {through: 'Like', as: 'Liked'});
-    db.User.belongsToMany(db.Room, {through: 'UserRooms'});
+    db.User.belongsToMany(db.Post, {through: "Like", as: "Liked"});
+    db.User.belongsToMany(db.Room, {through: "UserRooms"});
   };
   return User;
 };

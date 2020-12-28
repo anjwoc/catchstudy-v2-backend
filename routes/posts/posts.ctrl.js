@@ -47,7 +47,7 @@ exports.allPosts = async (req, res, next) => {
         },
         {
           model: db.Hashtag,
-          as: "hashtags",
+          // as: "hashtags",
           attributes: ["name"],
         },
       ],
@@ -337,18 +337,40 @@ exports.loadCategoryPosts = async (req, res, next) => {
   }
 };
 
-/* 일반 단어 검색, 해시태그 조건 검색, 지역 조건 검색 */
+/* 
+  일반 단어 검색, 해시태그 조건 검색, 지역 조건 검색
+  1. 검색어를 파라미터 형식으로 전달받는 부분을 쿼리스트링으로 변경
+  2. 검색 조건 별 옵션 수정
+    - 검색어만 있는 경우
+    - 검색어와 지역만 있는 경우
+    - 검색어, 지역, 해시태그 모두 있는 경우
+*/
+
 exports.searchPosts = async (req, res, next) => {
   try {
-    const word = req.params.word;
+    const word = req.query.word;
     const lastId = req.query.lastId;
-    const tags = req.query.tags;
+    const hashtags = req.query.tags;
     const location = req.query.location;
+    const tags = hashtags && hashtags.split(",");
     let where = {
-      title: {
-        [Op.like]: `%${word}%`,
-      },
+      [Op.and]: [],
     };
+
+    if (word) {
+      where[Op.and].push({
+        title: {
+          [Op.like]: `%${word}%`,
+        },
+      });
+    }
+
+    if (location) {
+      where[Op.and].push({
+        location: location,
+      });
+    }
+
     if (parseInt(lastId, 10)) {
       where = Object.assign(where, {
         id: {
@@ -356,32 +378,6 @@ exports.searchPosts = async (req, res, next) => {
         },
       });
     }
-    // if (location) {
-    //   where = Object.assign(where, {
-    //     location: location,
-    //   });
-    // }
-    let tagConditon = {};
-    if (tags) {
-      tagCondition = Object.assign(tagConditon, {
-        name: {
-          [Op.or]: tags.split(","),
-        },
-      });
-    }
-
-    // const result = await db.Post.findAll({
-    //   include: [
-    //     {
-    //       model: db.Hashtag,
-    //       where: {
-    //         name: {
-    //           [Op.or]: tags,
-    //         },
-    //       },
-    //     },
-    //   ],
-    // });
 
     const searchPosts = await db.Post.findAll({
       where,
@@ -391,9 +387,6 @@ exports.searchPosts = async (req, res, next) => {
           attributes: ["id", "email", "name", "imgSrc"],
         },
         {
-          model: db.Image,
-        },
-        {
           model: db.User,
           as: "Likers",
           attributes: ["id"],
@@ -401,8 +394,12 @@ exports.searchPosts = async (req, res, next) => {
         {
           model: db.Hashtag,
           as: "hashtags",
-          where: tagConditon,
-          attributes: ["name"],
+          where: {
+            name: {
+              [Op.or]: tags,
+            },
+          },
+          attributes: [],
         },
       ],
     });
