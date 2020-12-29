@@ -356,6 +356,15 @@ exports.searchPosts = async (req, res, next) => {
     let where = {
       [Op.and]: [],
     };
+    let tagCondition = {};
+
+    if (tags) {
+      tagCondition = {
+        name: {
+          [Op.or]: tags,
+        },
+      };
+    }
 
     if (word) {
       where[Op.and].push({
@@ -394,11 +403,7 @@ exports.searchPosts = async (req, res, next) => {
         {
           model: db.Hashtag,
           as: "hashtags",
-          where: {
-            name: {
-              [Op.or]: tags,
-            },
-          },
+          where: tagCondition || {},
           attributes: [],
         },
       ],
