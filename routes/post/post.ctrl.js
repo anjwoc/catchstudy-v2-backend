@@ -1,4 +1,4 @@
-const db = require('../../models');
+const db = require("../../models");
 
 exports.addPost = async (req, res, next) => {
   try {
@@ -46,15 +46,15 @@ exports.addPost = async (req, res, next) => {
       include: [
         {
           model: db.User,
-          attributes: ['email', 'name'],
+          attributes: ["email", "name"],
         },
         {
           model: db.Image,
         },
         {
           model: db.User,
-          as: 'Likers',
-          attributes: ['id'],
+          as: "Likers",
+          attributes: ["id"],
         },
       ],
     });
@@ -72,7 +72,7 @@ exports.deletePost = async (req, res, next) => {
         id: req.params.id,
       },
     });
-    res.json('삭제 성공');
+    res.json("삭제 성공");
   } catch (err) {
     console.error(err);
     next(err);
@@ -99,12 +99,12 @@ exports.updatePost = async (req, res, next) => {
     const updatedPost = await db.Post.findOne({where: {id: req.params.id}});
     // 만약 기존의 해시태그에서 줄어들었다면 filter로 삭제된 태그를 찾아서 디비에서 제거
     if (tagHistory) {
-      const deleteTags = tagHistory.filter(v => !hashtags.includes(v));
+      const deleteTags = tagHistory.filter(v => !hashtags.includes(v.name));
       if (deleteTags) {
         await updatedPost.removeHashtag(
-          deleteTags.map(r => {
+          deleteTags.map(tag => {
             db.Hashtag.destroy({
-              where: {name: r},
+              where: {name: tag.name},
             });
           }),
         );
@@ -146,10 +146,10 @@ exports.updatePost = async (req, res, next) => {
 exports.updateStatus = async (req, res, next) => {
   try {
     let status = req.body.status;
-    if (status === 'open') {
-      status = 'closed';
+    if (status === "open") {
+      status = "closed";
     } else {
-      res.status(403).send('이미 모집완료된 스터디입니다.');
+      res.status(403).send("이미 모집완료된 스터디입니다.");
     }
     await db.Post.update(
       {
@@ -191,20 +191,20 @@ exports.loadUpdatePost = async (req, res, next) => {
       include: [
         {
           model: db.User,
-          attributes: ['id', 'email', 'name', 'imgSrc', 'about'],
+          attributes: ["id", "email", "name", "imgSrc", "about"],
         },
         {
           model: db.Image,
         },
         {
           model: db.User,
-          as: 'Likers',
-          attributes: ['id'],
+          as: "Likers",
+          attributes: ["id"],
         },
         {
           model: db.Hashtag,
-          as: 'hashtags',
-          attributes: ['name'],
+          as: "hashtags",
+          attributes: ["name"],
         },
       ],
     });
@@ -222,24 +222,24 @@ exports.loadPost = async (req, res, next) => {
       include: [
         {
           model: db.User,
-          attributes: ['id', 'email', 'name', 'imgSrc', 'about'],
+          attributes: ["id", "email", "name", "imgSrc", "about"],
         },
         {
           model: db.Image,
         },
         {
           model: db.User,
-          as: 'Likers',
-          attributes: ['id'],
+          as: "Likers",
+          attributes: ["id"],
         },
         {
           model: db.Hashtag,
-          as: 'hashtags',
-          attributes: ['name'],
+          as: "hashtags",
+          attributes: ["name"],
         },
       ],
     });
-    post.increment('hit');
+    post.increment("hit");
 
     res.json(post);
   } catch (err) {
@@ -253,9 +253,9 @@ exports.addLike = async (req, res, next) => {
     const post = await db.Post.findOne({where: {id: req.params.id}});
 
     if (!post) {
-      return res.status(404).send('포스트가 존재하지 않습니다');
+      return res.status(404).send("포스트가 존재하지 않습니다");
     }
-    post.increment('like');
+    post.increment("like");
     await post.addLiker(req.user.id);
     res.json({userId: req.user.id});
   } catch (err) {
@@ -268,9 +268,9 @@ exports.removeLike = async (req, res, next) => {
   try {
     const post = await db.Post.findOne({where: {id: req.params.id}});
     if (!post) {
-      return res.status(404).send('포스트가 존재하지 않습니다');
+      return res.status(404).send("포스트가 존재하지 않습니다");
     }
-    post.decrement('like');
+    post.decrement("like");
     await post.removeLiker(req.user.id);
     res.json({userId: req.user.id});
   } catch (err) {
