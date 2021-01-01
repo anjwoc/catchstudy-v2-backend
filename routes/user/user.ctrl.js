@@ -1,7 +1,7 @@
-const db = require('../../models');
-const bcrypt = require('bcrypt');
-const passport = require('passport');
-require('dotenv').config();
+const db = require("../../models");
+const bcrypt = require("bcrypt");
+const passport = require("passport");
+require("dotenv").config();
 
 exports.loadUser = async (req, res, next) => {
   try {
@@ -17,11 +17,11 @@ exports.loadConnectionUser = async (req, res, next) => {
   try {
     const user = await db.User.findOne({
       where: {id: req.params.id},
-      attributes: ['id', 'email', 'about', 'job', 'location', 'imgSrc', 'name'],
+      attributes: ["id", "email", "about", "job", "location", "imgSrc", "name"],
       include: [
         {
           model: db.Media,
-          attributes: ['github', 'gmail', 'facebook', 'userId'],
+          attributes: ["github", "gmail", "facebook", "userId"],
         },
       ],
     });
@@ -64,7 +64,7 @@ exports.signUp = async (req, res, next) => {
     });
     if (exUser) {
       //이미 회원가입한 사람
-      return res.status(403).sned('이미 가입된 회원입니다.');
+      return res.status(403).sned("이미 가입된 회원입니다.");
     }
     await db.User.create({
       email: req.body.email,
@@ -73,7 +73,7 @@ exports.signUp = async (req, res, next) => {
       about: req.body.about,
     }); // HTTP STATUS CODE
 
-    passport.authenticate('local', (err, user, info) => {
+    passport.authenticate("local", (err, user, info) => {
       if (err) {
         console.error(err);
         return next(err);
@@ -89,15 +89,15 @@ exports.signUp = async (req, res, next) => {
         }
         const fullUser = await db.User.findOne({
           where: {id: user.id},
-          attributes: ['id', 'email', 'name', 'about', 'job', 'location', 'imgSrc', 'createdAt', 'socialType'],
+          attributes: ["id", "email", "name", "about", "job", "location", "imgSrc", "createdAt", "socialType"],
           include: [
             {
               model: db.Post,
-              attributes: ['id'],
+              attributes: ["id"],
             },
             {
               model: db.Media,
-              attributes: ['github', 'gmail', 'facebook', 'userId'],
+              attributes: ["github", "gmail", "facebook", "userId"],
             },
           ],
         });
@@ -113,7 +113,7 @@ exports.signUp = async (req, res, next) => {
 // 로그인하는 컨트롤러
 exports.logIn = async (req, res, next) => {
   //done(에러, 성공, 실패)
-  passport.authenticate('local', (err, user, info) => {
+  passport.authenticate("local", (err, user, info) => {
     if (err) {
       // 에러가 발생하면
       console.error(err);
@@ -131,15 +131,15 @@ exports.logIn = async (req, res, next) => {
       }
       const fullUser = await db.User.findOne({
         where: {id: user.id},
-        attributes: ['id', 'email', 'name', 'about', 'job', 'location', 'imgSrc', 'createdAt', 'socialType'],
+        attributes: ["id", "email", "name", "about", "job", "location", "imgSrc", "createdAt", "socialType"],
         include: [
           {
             model: db.Post,
-            attributes: ['id'],
+            attributes: ["id"],
           },
           {
             model: db.Media,
-            attributes: ['github', 'gmail', 'facebook', 'userId'],
+            attributes: ["github", "gmail", "facebook", "userId"],
           },
         ],
       });
@@ -154,7 +154,7 @@ exports.logOut = async (req, res, next) => {
     return await Promise.all([
       req.logout(),
       req.session.destroy(), // 선택사항
-      res.clearCookie('connect.sid', {path: '/'}).status(200).send('로그아웃 되었습니다.'),
+      res.clearCookie("connect.sid", {path: "/"}).status(200).send("로그아웃 되었습니다."),
     ]);
   } catch (err) {
     console.error(err);
@@ -167,7 +167,7 @@ exports.uploadProfileImage = async (req, res, next) => {
   try {
     const user = await db.User.findOne({where: {id: req.body.userId}});
     if (!user) {
-      res.status(404).send('회원이 존재하지 않습니다');
+      res.status(404).send("회원이 존재하지 않습니다");
     }
 
     if (req.files.image) {
@@ -183,11 +183,11 @@ exports.uploadProfileImage = async (req, res, next) => {
         );
         return res.json({
           path: path,
-          msg: '프로필 이미지를 변경했습니다.',
+          msg: "프로필 이미지를 변경했습니다.",
         });
       }
     }
-    return res.json('No Change');
+    return res.json("No Change");
   } catch (err) {
     console.error(err);
   }
@@ -209,7 +209,7 @@ exports.updateProfile = async (req, res, next) => {
       },
     );
 
-    res.status(200).send('프로필 변경 성공');
+    res.status(200).send("프로필 변경 성공");
   } catch (err) {
     console.error(err);
   }
@@ -224,7 +224,7 @@ exports.deleteAccount = async (req, res, next) => {
     return await Promise.all([
       req.logout(),
       req.session.destroy(), // 선택사항
-      res.clearCookie('connect.sid', {path: '/'}).status(200).send('로그아웃 되었습니다.'),
+      res.clearCookie("connect.sid", {path: "/"}).status(200).send("로그아웃 되었습니다."),
     ]);
   } catch (err) {
     console.error(err);
