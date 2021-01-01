@@ -41,7 +41,8 @@ if (prod) {
   app.use(
     cors({
       // origin: /delog\.net$/,
-      origin: ["http://catchstudy.online", "https://catchstudy.online"],
+      // origin: ["http://catchstudy.online", "https://catchstudy.online"],
+      origin: /catchstudy\.online$/,
       credentials: true,
     }),
   );
@@ -71,4 +72,4 @@ app.listen(app.get("port"), () => {
 });
 
 // webSocket(io, app);
-module.exports = app;
+// module.exports = app;
