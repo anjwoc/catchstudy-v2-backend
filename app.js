@@ -65,7 +65,7 @@ app.use(sessionMiddleware);
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use("/api", routes);
+app.use("/", routes);
 
 app.listen(app.get("port"), () => {
   console.log(`Server is Listening on port ${app.get("port")}`);
