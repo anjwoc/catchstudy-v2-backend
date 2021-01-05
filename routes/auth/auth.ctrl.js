@@ -1,23 +1,23 @@
-const db = require('../../models');
-require('dotenv').config();
+const db = require("../../models");
+require("dotenv").config();
 
 exports.githubLogin = async (req, res, next) => {
   try {
-    const {email, socialType} = req.body;
+    const { email, socialType } = req.body;
     const loginUser = await db.User.findOne({
       where: {
         email: email,
         socialType: socialType,
       },
-      attributes: ['id', 'email', 'socialType', 'name', 'about', 'imgSrc'],
+      attributes: ["id", "email", "socialType", "name", "about", "imgSrc"],
       include: [
         {
           model: db.Post,
-          attributes: ['id'],
+          attributes: ["id"],
         },
         {
           model: db.Media,
-          attributes: ['github', 'gmail', 'facebook', 'userId'],
+          attributes: ["github", "gmail", "facebook", "userId"],
         },
       ],
     });
@@ -30,19 +30,19 @@ exports.githubLogin = async (req, res, next) => {
 
 exports.githubCallback = async (req, res, next) => {
   try {
-    const {id, displayName, username, profileUrl, emails, photos, provider} = res.req.user;
-    const data = res.req.user;
+    const json = req?.user?._json;
+    const { id, displayName, username, profileUrl, email, avatar_url, provider, bio, location, company } = json;
     const userInfo = {
-      id,
-      displayName,
+      id: id,
+      displayName: displayName,
       name: username,
-      profileUrl,
-      email: emails[0].value,
-      photo: photos[0].value,
-      provider,
-      about: data._json.bio,
-      location: data._json.location,
-      job: data._json.company,
+      profileUrl: profileUrl,
+      email: email,
+      photo: avatar_url,
+      provider: provider,
+      about: bio,
+      location: location,
+      job: company,
     };
 
     const exUser = await db.User.findOne({
@@ -64,11 +64,11 @@ exports.githubCallback = async (req, res, next) => {
       return res.redirect(`${process.env.CLIENT_HOST}`);
     } else {
       // 가입한 다른 소셜 계정의 이메일이 같은 경우
-      const msg = encodeURIComponent('이미 가입된 이메일 계정입니다.');
+      const msg = encodeURIComponent("이미 가입된 이메일 계정입니다.");
       return res.redirect(`${process.env.CLIENT_HOST}/login?error=${msg}`);
     }
     await db.User.findOrCreate({
-      where: {openId: userInfo.id},
+      where: { openId: userInfo.id },
       defaults: {
         openId: userInfo.id,
         name: userInfo.name,
@@ -113,16 +113,16 @@ exports.googleCallback = async (req, res, next) => {
       return res.redirect(`${process.env.CLIENT_HOST}`);
     }
     await db.User.findOrCreate({
-      where: {openId: userInfo.id},
+      where: { openId: userInfo.id },
       defaults: {
         openId: userInfo.id,
         name: userInfo.name,
         email: userInfo.email,
         socialType: userInfo.provider,
         imgSrc: userInfo.photo,
-        location: '',
-        about: '',
-        job: '',
+        location: "",
+        about: "",
+        job: "",
       },
     });
 

@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Media = sequelize.define(
-    'media',
+    "media",
     {
       gmail: {
         type: DataTypes.STRING(40), //40자 이내
@@ -17,8 +17,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       freezeTableName: true,
-      charset: 'utf8',
-      collate: 'utf8_unicode_ci', //한글 저장
+      charset: "utf8",
+      collate: "utf8_unicode_ci", //한글 저장
     },
   );
 
