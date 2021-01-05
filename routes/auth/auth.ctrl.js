@@ -30,7 +30,7 @@ exports.githubLogin = async (req, res, next) => {
 
 exports.githubCallback = async (req, res, next) => {
   try {
-    const json = req?.user?._json;
+    const json = req.user._json;
     const { id, displayName, username, profileUrl, email, avatar_url, provider, bio, location, company } = json;
     const userInfo = {
       id: id,
