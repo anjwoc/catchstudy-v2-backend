@@ -1,9 +1,10 @@
 import { db, IUser } from "../../models";
 import dotenv from "dotenv";
 import { RequestHandler } from "express";
+import bcrypt from "bcrypt";
 dotenv.config();
 
-const githubLogin: RequestHandler = async (req, res, next) => {
+const githubLogin = async (req, res, next) => {
   try {
     const { email, socialType } = req.body;
     const loginUser = await db.User.findOne({
@@ -26,7 +27,7 @@ const githubLogin: RequestHandler = async (req, res, next) => {
   }
 };
 
-const githubCallback: RequestHandler = async (req, res, next) => {
+const githubCallback = async (req, res, next) => {
   try {
     const json = req!.user!["_json"];
     const { id, displayName, username, profileUrl, email, avatar_url, provider, bio, location, company } = json;
@@ -77,10 +78,12 @@ const githubCallback: RequestHandler = async (req, res, next) => {
   }
 };
 
-const googleCallback: RequestHandler = async (req, res, next) => {
+const googleCallback = async (req, res, next) => {
   try {
-    const json = req!.user!["_json"];
-    const { id, displayName, picture, email, provider } = json;
+    const user = req?.user;
+    const json = user!["_json"];
+    const { id, displayName, provider } = user;
+    const { picture, email } = json;
     const userInfo = {
       id: id,
       name: displayName,
@@ -108,6 +111,8 @@ const googleCallback: RequestHandler = async (req, res, next) => {
 
       return res.redirect(`${process.env.CLIENT_HOST}`);
     }
+    const password = userInfo.id.slice(8) + Math.random().toString(36).substr(2, 8);
+    const hashedPassword = await bcrypt.hash(password, 12);
     await db.User.findOrCreate({
       where: { openId: userInfo.id },
       defaults: {
@@ -116,6 +121,7 @@ const googleCallback: RequestHandler = async (req, res, next) => {
         email: userInfo.email,
         socialType: userInfo.provider,
         imgSrc: userInfo.photo,
+        password: hashedPassword,
         location: "",
         about: "",
         job: "",

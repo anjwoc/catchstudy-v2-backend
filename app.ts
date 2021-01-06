@@ -17,7 +17,7 @@ const app = express();
 const prod: boolean = process.env.NODE_ENV === "production";
 app.set("port", prod ? process.env.PORT : 4000);
 sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     console.log("Successfully DB Connection");
   })

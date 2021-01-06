@@ -209,10 +209,11 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
+//FIXME: 회원 탈퇴 후 connect.sid가 지워지지 않는 버그
 const deleteAccount = async (req, res, next) => {
   try {
     const userId = req.params.id;
-    await db.User.destroy({
+    db.User.destroy({
       where: { id: userId },
     });
     return await Promise.all([
@@ -222,6 +223,7 @@ const deleteAccount = async (req, res, next) => {
     ]);
   } catch (err) {
     console.error(err);
+    return next(err);
   }
 };
 
