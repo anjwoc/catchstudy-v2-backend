@@ -1,6 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { dbType } from "./index";
 import { sequelize } from "./sequelize";
+import { ProfileData } from "../interfaces/passport.interface";
 
 enum SocialTypes {
   "github",
@@ -8,7 +9,7 @@ enum SocialTypes {
   "kakao",
 }
 
-interface IUser {
+export interface IUser extends ProfileData {
   readonly id: number;
   email: string;
   password: string;
@@ -95,7 +96,7 @@ User.init(
   {
     // sequelize.ts에서 생성한 Sequelize객체를 넣어줘야 실제 디비랑 연결이 된다.
     sequelize,
-    modelName: "User",
+    modelName: "user",
     tableName: "user",
     charset: "utf8",
     collate: "utf8_general_ci",
@@ -110,7 +111,5 @@ export const associate = (db: dbType) => {
   db.User.belongsToMany(db.Post, { through: "Like", as: "Liked" });
   db.User.hasMany(db.Reply);
 };
-
-export { IUser };
 
 export default User;

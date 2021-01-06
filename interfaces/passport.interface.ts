@@ -1,3 +1,4 @@
+// passport-github & passport-google
 export interface ProfileData {
   provider: string;
   profileUrl: string;

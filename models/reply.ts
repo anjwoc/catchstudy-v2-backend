@@ -28,7 +28,7 @@ Reply.init(
   },
   {
     sequelize,
-    modelName: "Reply",
+    modelName: "reply",
     tableName: "reply",
     charset: "utf8",
     collate: "utf8_general_ci", //한글 저장

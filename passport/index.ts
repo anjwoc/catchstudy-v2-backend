@@ -2,7 +2,6 @@ import passport from "passport";
 import dotenv from "dotenv";
 import User from "../models/user";
 import Post from "../models/post";
-import Sns from "../models/sns";
 
 import local from "./local";
 dotenv.config();
@@ -11,6 +10,11 @@ const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+
+interface LoginOptions {
+  provider?: string;
+  id?: string;
+}
 
 export default () => {
   passport.serializeUser((user: User, done) => {
@@ -37,13 +41,9 @@ export default () => {
             model: Post,
             attributes: ["id"],
           },
-          {
-            model: Sns,
-            attributes: ["github", "gmail", "facebook", "userId"],
-          },
         ],
       });
-      console.log(user);
+
       if (!user) {
         return new Error("no user");
       }
@@ -56,8 +56,3 @@ export default () => {
 
   local();
 };
-
-interface LoginOptions {
-  provider?: string;
-  id?: string;
-}

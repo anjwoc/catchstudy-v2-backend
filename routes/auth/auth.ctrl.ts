@@ -1,4 +1,4 @@
-import { db } from "../../models";
+import { db, IUser } from "../../models";
 import dotenv from "dotenv";
 import { RequestHandler } from "express";
 dotenv.config();
@@ -28,7 +28,7 @@ const githubLogin: RequestHandler = async (req, res, next) => {
 
 const githubCallback: RequestHandler = async (req, res, next) => {
   try {
-    const json = req!.user!._json;
+    const json = req!.user!["_json"];
     const { id, displayName, username, profileUrl, email, avatar_url, provider, bio, location, company } = json;
     const userInfo = {
       id: id,
@@ -79,8 +79,8 @@ const githubCallback: RequestHandler = async (req, res, next) => {
 
 const googleCallback: RequestHandler = async (req, res, next) => {
   try {
-    const data = req!.user!._json;
-    const { id, displayName, picture, email, provider } = data;
+    const json = req!.user!["_json"];
+    const { id, displayName, picture, email, provider } = json;
     const userInfo = {
       id: id,
       name: displayName,

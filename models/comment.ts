@@ -24,7 +24,7 @@ Comment.init(
   },
   {
     sequelize,
-    modelName: "Comment",
+    modelName: "comment",
     tableName: "comment",
     charset: "utf8",
     collate: "utf8_general_ci", //한글 저장

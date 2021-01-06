@@ -7,14 +7,17 @@ import dotenv from "dotenv";
 import passport from "passport";
 import hpp from "hpp";
 import helmet from "helmet";
+import routes from "./routes";
+import passportConfig from "./passport";
 import { sequelize } from "./models";
 
 dotenv.config();
+passportConfig();
 const app = express();
 const prod: boolean = process.env.NODE_ENV === "production";
 app.set("port", prod ? process.env.PORT : 4000);
 sequelize
-  .sync({ force: false })
+  .sync({ force: true })
   .then(() => {
     console.log("Successfully DB Connection");
   })
@@ -61,9 +64,10 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("/api", routes);
 
 app.get("/", (req, res, next) => {
-  res.send("Hello World");
+  res.send("Api Root");
 });
 
 app.listen(app.get("port"), () => {

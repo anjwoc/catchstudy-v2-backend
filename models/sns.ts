@@ -28,7 +28,7 @@ Sns.init(
   },
   {
     sequelize,
-    modelName: "Media",
+    modelName: "media",
     tableName: "media",
     freezeTableName: true,
     // timestamps: false,
