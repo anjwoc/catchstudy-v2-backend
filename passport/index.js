@@ -1,10 +1,10 @@
-const passport = require('passport');
+const passport = require("passport");
 // const FacebookStrategy = require('passport-facebook').Strategy;
-const GitHubStrategy = require('passport-github').Strategy;
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const local = require('./local');
-const dotenv = require('dotenv');
-const db = require('../models');
+const GitHubStrategy = require("passport-github").Strategy;
+const GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+const local = require("./local");
+const dotenv = require("dotenv");
+const db = require("../models");
 
 dotenv.config();
 
@@ -35,15 +35,11 @@ module.exports = () => {
       }
       const user = await db.User.findOne({
         where,
-        attributes: ['id', 'email', 'name', 'about', 'job', 'location', 'imgSrc', 'socialType', 'createdAt'],
+        attributes: ["id", "email", "name", "about", "job", "location", "imgSrc", "socialType", "createdAt"],
         include: [
           {
             model: db.Post,
-            attributes: ['id'],
-          },
-          {
-            model: db.Media,
-            attributes: ['github', 'gmail', 'facebook', 'userId'],
+            attributes: ["id"],
           },
         ],
       });

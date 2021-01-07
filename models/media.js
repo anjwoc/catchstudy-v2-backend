@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Media.associate = db => {
-    db.Media.belongsTo(db.User);
+    // db.Media.belongsTo(db.User);
   };
   return Media;
 };

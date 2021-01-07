@@ -56,13 +56,13 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   User.associate = db => {
-    db.User.hasOne(db.Media);
-    db.User.hasMany(db.Room);
+    // db.User.hasOne(db.Media);
+    // db.User.hasMany(db.Room);
     db.User.hasMany(db.Post);
     db.User.hasMany(db.Comment);
     db.User.hasMany(db.Reply);
-    db.User.belongsToMany(db.Post, {through: "Like", as: "Liked"});
-    db.User.belongsToMany(db.Room, {through: "UserRooms"});
+    db.User.belongsToMany(db.Post, { through: "Like", as: "Liked" });
+    // db.User.belongsToMany(db.Room, { through: "UserRooms" });
   };
   return User;
 };
