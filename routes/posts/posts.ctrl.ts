@@ -237,40 +237,23 @@ const loadHashtagsPosts = async (req, res, next) => {
   try {
     const hashtags = req.query.tags;
     const tags = hashtags.split(",");
-    const result = await Promise.all(
-      tags.map(tag => {
-        return db.Hashtag.findAll({
-          where: { name: tag },
-          include: [
-            {
-              model: db.Post,
-              attributes: ["id", "title"],
-              as: "hashtags",
-            },
-          ],
-        });
-      }),
-    );
+    const where = {
+      name: {
+        [Op.or]: tags,
+      },
+    };
 
-    let arr = [];
-    result.forEach(item => {
-      const data = item[0].posts.map(<IPost>(post) => {
-        return { id: post.id, title: post.title };
-      });
-      arr = [].concat(arr, data);
+    const posts = await db.Post.findAll({
+      attributes: ["id", "title"],
+      include: [
+        {
+          model: db.Hashtag,
+          as: "hashtags",
+          where,
+          attributes: [],
+        },
+      ],
     });
-
-    const posts = [];
-    const postsMap = new Map();
-    for (const item of arr) {
-      if (!postsMap.has(item.id)) {
-        postsMap.set(item.id, true);
-        posts.push({
-          id: item.id,
-          title: item.title,
-        });
-      }
-    }
 
     res.json(posts);
   } catch (err) {

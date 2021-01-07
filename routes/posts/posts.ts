@@ -13,8 +13,6 @@ router.get("/trendingPosts", posts.loadTrendingPosts);
 
 /* 프로필 페이지 관련 라우터 */
 
-// router.get('/:id/');
-
 /* 카테고리 관련 라우터 */
 router.get("/category", posts.loadCategoryPosts);
 
