@@ -72,7 +72,7 @@ const getComments = async (req, res, next) => {
       include: [
         {
           model: db.User,
-          attributes: ["id", "email", "imgSrc"],
+          attributes: ["id", "name", "imgSrc"],
         },
       ],
       order: [["createdAt", "DESC"]],
@@ -86,7 +86,7 @@ const getComments = async (req, res, next) => {
 
 const deleteComment = async (req, res, next) => {
   try {
-    const post = await db.Post.findOne({ where: { id: req.body.postId } });
+    const post = await db.Post.findOne({ where: { id: req.query.postId } });
     if (!post) {
       return res.status(404).send("포스트가 존재하지 않습니다.");
     }

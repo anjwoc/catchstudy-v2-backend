@@ -96,7 +96,18 @@ const deletePost = async (req, res, next) => {
 
 const updatePost = async <IPost>(req, res, next) => {
   try {
-    const { title, content, location, hashtags, tagHistory, category, image, questions } = req.body;
+    const {
+      title,
+      content,
+      location,
+      hashtags,
+      tagHistory,
+      category,
+      image,
+      questions,
+      minPeople,
+      maxPeople,
+    } = req.body;
     await db.Post.update(
       {
         title: title,
@@ -104,6 +115,9 @@ const updatePost = async <IPost>(req, res, next) => {
         location: location,
         category: category,
         questions: questions,
+        minPeople: minPeople,
+        maxPeople: maxPeople,
+        numPeople: `${minPeople}-${maxPeople}`,
       },
       {
         where: {
@@ -114,7 +128,7 @@ const updatePost = async <IPost>(req, res, next) => {
     const updatedPost = await db.Post.findOne({ where: { id: req.params.id } });
     // 만약 기존의 해시태그에서 줄어들었다면 filter로 삭제된 태그를 찾아서 디비에서 제거
     if (tagHistory) {
-      const deleteTags = tagHistory.filter(v => !hashtags.includes(v.name));
+      const deleteTags = tagHistory.filter((v: IHashtag) => !hashtags.includes(v.name));
       if (deleteTags) {
         await updatedPost?.removeHashtag(
           deleteTags.map((tag: IHashtag) => {
@@ -127,8 +141,8 @@ const updatePost = async <IPost>(req, res, next) => {
     }
 
     if (hashtags) {
-      const result = await Promise.all(
-        hashtags.map(tag =>
+      const result = await Promise.all<IHashtag>(
+        hashtags.map((tag: string) =>
           db.Hashtag.findOrCreate({
             where: { name: tag },
           }),

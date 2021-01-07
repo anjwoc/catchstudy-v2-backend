@@ -48,7 +48,6 @@ interface IPost {
   user: User;
   readonly createdAt: Date;
   readonly updatedAt: Date;
-
   addHashtag: BelongsToManyAddAssociationMixin<Hashtag, number>;
   addHashtags: BelongsToManyAddAssociationMixin<Hashtag, number>;
   removeHashtag: BelongsToManyRemoveAssociationMixin<Hashtag, number>;
@@ -127,6 +126,10 @@ Post.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
+    },
+    questions: {
+      type: DataTypes.JSON,
+      allowNull: true,
     },
     like: {
       type: DataTypes.INTEGER,

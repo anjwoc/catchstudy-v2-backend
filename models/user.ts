@@ -85,7 +85,7 @@ User.init(
     },
     about: {
       type: DataTypes.STRING(200),
-      allowNull: false,
+      allowNull: true,
     },
     job: {
       type: DataTypes.STRING(30),
