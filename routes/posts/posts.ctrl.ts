@@ -45,7 +45,7 @@ const allPosts = async (req, res, next) => {
         },
         {
           model: db.Hashtag,
-          // as: "hashtags",
+          as: "hashtags",
           attributes: ["name"],
         },
       ],
@@ -245,6 +245,7 @@ const loadHashtagsPosts = async (req, res, next) => {
             {
               model: db.Post,
               attributes: ["id", "title"],
+              as: "hashtags",
             },
           ],
         });
@@ -253,7 +254,7 @@ const loadHashtagsPosts = async (req, res, next) => {
 
     let arr = [];
     result.forEach(item => {
-      const data = item[0].posts.map(post => {
+      const data = item[0].posts.map(<IPost>(post) => {
         return { id: post.id, title: post.title };
       });
       arr = [].concat(arr, data);

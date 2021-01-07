@@ -3,13 +3,27 @@ import { db, dbType, IHashtag, IPost } from "../../models";
 
 const addPost = async (req, res, next) => {
   try {
-    const { title, content, location, hashtags, category, type, numPeople, coverImg, questions } = req.body;
+    const {
+      title,
+      content,
+      location,
+      hashtags,
+      category,
+      type,
+      numPeople,
+      coverImg,
+      questions,
+      minPeople,
+      maxPeople,
+    } = req.body;
     const newPost = await db.Post.create({
       title: title,
       content: content,
       coverImg: coverImg,
       location: location,
       category: category,
+      minPeople: minPeople,
+      maxPeople: maxPeople,
       type: type,
       numPeople: numPeople,
       questions: questions,

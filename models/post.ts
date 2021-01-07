@@ -1,9 +1,15 @@
 import { Model, DataTypes } from "sequelize";
 import { db, dbType } from "./index";
 import { sequelize } from "./sequelize";
-import { HasManyAddAssociationMixin, HasManyRemoveAssociationMixin } from "sequelize";
+import {
+  HasManyAddAssociationMixin,
+  HasManyRemoveAssociationMixin,
+  BelongsToManyAddAssociationMixin,
+  BelongsToManyRemoveAssociationMixin,
+} from "sequelize";
 import Hashtag from "./hashtag";
 import User from "./user";
+import Image from "./image";
 
 enum CategoryTypes {
   "어학",
@@ -39,12 +45,17 @@ interface IPost {
   likes: number | undefined;
   hit: number | undefined;
   status: PostStatusTypes;
+  user: User;
   readonly createdAt: Date;
   readonly updatedAt: Date;
-  addHashtag: HasManyAddAssociationMixin<Hashtag, string | object>;
-  removeHashtag: HasManyRemoveAssociationMixin<Hashtag, string | object>;
-  addLiker: HasManyAddAssociationMixin<User, object | number>;
-  removeLiker: HasManyRemoveAssociationMixin<User, object | number>;
+
+  addHashtag: BelongsToManyAddAssociationMixin<Hashtag, number>;
+  addHashtags: BelongsToManyAddAssociationMixin<Hashtag, number>;
+  removeHashtag: BelongsToManyRemoveAssociationMixin<Hashtag, number>;
+  addLiker: BelongsToManyAddAssociationMixin<User, number>;
+  removeLiker: BelongsToManyRemoveAssociationMixin<User, number>;
+  addImage: HasManyAddAssociationMixin<Image, number>;
+  addImages: HasManyAddAssociationMixin<Image, number>;
 }
 
 class Post extends Model {
@@ -63,9 +74,9 @@ class Post extends Model {
   public likes: number | undefined;
   public hit: number | undefined;
   public status!: PostStatusTypes;
+  public readonly userId!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-
   public addHashtag!: HasManyAddAssociationMixin<Hashtag, string | object>;
   public removeHashtag!: HasManyRemoveAssociationMixin<Hashtag, string | object>;
   public addLiker!: HasManyAddAssociationMixin<User, object | number>;
@@ -148,7 +159,7 @@ export const associate = (db: dbType) => {
   db.Post.hasMany(db.Comment);
   db.Post.hasMany(db.Image);
   db.Post.belongsToMany(db.User, { through: "Like", as: "Likers" });
-  db.Post.belongsToMany(db.Hashtag, { through: "PostHashtag" });
+  db.Post.belongsToMany(db.Hashtag, { through: "PostHashtag", as: "hashtags" });
 };
 
 export { IPost };

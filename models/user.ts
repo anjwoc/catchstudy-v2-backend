@@ -1,7 +1,15 @@
-import { Model, DataTypes } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  BelongsToManyGetAssociationsMixin,
+  HasManyGetAssociationsMixin,
+  BelongsToManyRemoveAssociationMixin,
+  BelongsToManyAddAssociationMixin,
+} from "sequelize";
 import { dbType } from "./index";
 import { sequelize } from "./sequelize";
 import { ProfileData } from "../interfaces/passport.interface";
+import Post from "./post";
 
 enum SocialTypes {
   "github",
@@ -37,8 +45,17 @@ class User extends Model {
   public job: string | undefined;
   public location!: string | undefined;
   public imgSrc!: string;
+  public gmail!: string;
+  public readonly Posts?: Post[];
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  public addFollowing!: BelongsToManyAddAssociationMixin<User, number>;
+  public getFollowings!: BelongsToManyGetAssociationsMixin<User>;
+  public removeFollowing!: BelongsToManyRemoveAssociationMixin<User, number>;
+  public getFollowers!: BelongsToManyGetAssociationsMixin<User>;
+  public removeFollower!: BelongsToManyRemoveAssociationMixin<User, number>;
+  public getPosts!: HasManyGetAssociationsMixin<Post>;
 }
 
 User.init(
@@ -108,8 +125,10 @@ export const associate = (db: dbType) => {
   // db.User.hasOne(db.Sns);
   db.User.hasMany(db.Post);
   db.User.hasMany(db.Comment);
-  db.User.belongsToMany(db.Post, { through: "Like", as: "Liked" });
   db.User.hasMany(db.Reply);
+  db.User.belongsToMany(db.Post, { through: "Like", as: "Liked" });
+  db.User.belongsToMany(db.User, { through: "Follow", as: "Followers", foreignKey: "followingId" });
+  db.User.belongsToMany(db.User, { through: "Follow", as: "Followings", foreignKey: "followerId" });
 };
 
 export default User;
