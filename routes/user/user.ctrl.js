@@ -16,14 +16,8 @@ exports.loadUser = async (req, res, next) => {
 exports.loadConnectionUser = async (req, res, next) => {
   try {
     const user = await db.User.findOne({
-      where: {id: req.params.id},
+      where: { id: req.params.id },
       attributes: ["id", "email", "about", "job", "location", "imgSrc", "name"],
-      include: [
-        {
-          model: db.Media,
-          attributes: ["github", "gmail", "facebook", "userId"],
-        },
-      ],
     });
     res.json(user);
   } catch (err) {
@@ -88,16 +82,12 @@ exports.signUp = async (req, res, next) => {
           return next(err);
         }
         const fullUser = await db.User.findOne({
-          where: {id: user.id},
+          where: { id: user.id },
           attributes: ["id", "email", "name", "about", "job", "location", "imgSrc", "createdAt", "socialType"],
           include: [
             {
               model: db.Post,
               attributes: ["id"],
-            },
-            {
-              model: db.Media,
-              attributes: ["github", "gmail", "facebook", "userId"],
             },
           ],
         });
@@ -130,16 +120,12 @@ exports.logIn = async (req, res, next) => {
         return next(err);
       }
       const fullUser = await db.User.findOne({
-        where: {id: user.id},
+        where: { id: user.id },
         attributes: ["id", "email", "name", "about", "job", "location", "imgSrc", "createdAt", "socialType"],
         include: [
           {
             model: db.Post,
             attributes: ["id"],
-          },
-          {
-            model: db.Media,
-            attributes: ["github", "gmail", "facebook", "userId"],
           },
         ],
       });
@@ -154,7 +140,7 @@ exports.logOut = async (req, res, next) => {
     return await Promise.all([
       req.logout(),
       req.session.destroy(), // 선택사항
-      res.clearCookie("connect.sid", {path: "/"}).status(200).send("로그아웃 되었습니다."),
+      res.clearCookie("connect.sid", { path: "/" }).status(200).send("로그아웃 되었습니다."),
     ]);
   } catch (err) {
     console.error(err);
@@ -165,7 +151,7 @@ exports.logOut = async (req, res, next) => {
 // 프로필 이미지를 업로드하는 컨트롤러
 exports.uploadProfileImage = async (req, res, next) => {
   try {
-    const user = await db.User.findOne({where: {id: req.body.userId}});
+    const user = await db.User.findOne({ where: { id: req.body.userId } });
     if (!user) {
       res.status(404).send("회원이 존재하지 않습니다");
     }
@@ -178,7 +164,7 @@ exports.uploadProfileImage = async (req, res, next) => {
             imgSrc: path,
           },
           {
-            where: {id: req.body.userId},
+            where: { id: req.body.userId },
           },
         );
         return res.json({
@@ -196,7 +182,7 @@ exports.uploadProfileImage = async (req, res, next) => {
 // 프로필을 업데이트하는 컨트롤러
 exports.updateProfile = async (req, res, next) => {
   try {
-    let {job, about, location} = req.body;
+    let { job, about, location } = req.body;
 
     await db.User.update(
       {
@@ -205,7 +191,7 @@ exports.updateProfile = async (req, res, next) => {
         about: about,
       },
       {
-        where: {id: req.params.id},
+        where: { id: req.params.id },
       },
     );
 
@@ -219,12 +205,12 @@ exports.deleteAccount = async (req, res, next) => {
   try {
     const userId = req.params.id;
     await db.User.destroy({
-      where: {id: userId},
+      where: { id: userId },
     });
     return await Promise.all([
       req.logout(),
       req.session.destroy(), // 선택사항
-      res.clearCookie("connect.sid", {path: "/"}).status(200).send("로그아웃 되었습니다."),
+      res.clearCookie("connect.sid", { path: "/" }).status(200).send("로그아웃 되었습니다."),
     ]);
   } catch (err) {
     console.error(err);

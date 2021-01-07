@@ -15,10 +15,6 @@ exports.githubLogin = async (req, res, next) => {
           model: db.Post,
           attributes: ["id"],
         },
-        {
-          model: db.Media,
-          attributes: ["github", "gmail", "facebook", "userId"],
-        },
       ],
     });
     res.json(loginUser);

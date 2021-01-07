@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Room = sequelize.define(
-    'room',
+    "room",
     {
       title: {
         type: DataTypes.STRING(30),
@@ -23,8 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      charset: 'utf8',
-      collate: 'utf8_unicode_ci',
+      charset: "utf8",
+      collate: "utf8_unicode_ci",
       freezeTableName: true,
     },
   );
@@ -32,8 +32,8 @@ module.exports = (sequelize, DataTypes) => {
   Room.associate = db => {
     db.Room.belongsTo(db.User);
     db.Room.hasMany(db.Chat);
-    db.Room.belongsToMany(db.Chat, {through: 'ChatRoom'});
-    db.Room.belongsToMany(db.User, {through: 'UserRooms'});
+    db.Room.belongsToMany(db.Chat, { through: "ChatRoom" });
+    db.Room.belongsToMany(db.User, { through: "UserRooms" });
   };
 
   return Room;

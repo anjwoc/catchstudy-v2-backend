@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Chat = sequelize.define(
-    'chat',
+    "chat",
     {
       user: {
         type: DataTypes.STRING(40),
@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      charset: 'utf8',
-      collate: 'utf8_unicode_ci',
+      charset: "utf8",
+      collate: "utf8_unicode_ci",
       freezeTableName: true,
     },
   );
