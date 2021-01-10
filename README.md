@@ -8,7 +8,15 @@
 
 ## 새로 적용한 부분
   - Typescript 도입
+    - 발생하지 않아도 될 간단한 타입으로 인한 버그들로 소모되는 시간으로 필요성을 느낌
+    - 기존의 JS로 작성된 모든 코드들을 TS로 옮겼다.
   - Jenkins를 통해 CI/CD 구성
+    - 기존에는 수동으로 AWS or GCP에 배포
+    - Jenkins를 이용해 CI/CD를 구성
+  - 프로젝트 구조 변경
+    - 아래 링크를 참조하고 기존 프로젝트는 나쁜예의 프로젝트 구조로 되어있었다.
+    - 포스트의 내용처럼 컴포넌트 기반으로 묶어서 구성
+    - https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/projectstructre/breakintcomponents.korean.md
 
 ## Tech Stack
 
