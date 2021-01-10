@@ -18,10 +18,14 @@
     - 포스트의 내용처럼 컴포넌트 기반으로 묶어서 구성
     - https://github.com/goldbergyoni/nodebestpractices/blob/master/sections/projectstructre/breakintcomponents.korean.md
 
-## 추후 적용할 기술
+## 추후 적용할 기술 or 기능
   - TDD
     - CI/CD를 구성하고나니 테스트가 얼마나 중요한지 깨달았다.
     - 테스트없는 배포 자동화는 무의미한 배포일뿐이였다.
+  - kakao login
+    - 현재 구글 로그인과 깃헙 로그인을 구현했다.
+    - 하지만 스터디 사이트인데 깃헙은 너무 개발자 친화적인 사이트라는 생각이 들었다.
+    - 깃헙을 빼고 카카오로 대체해야겠다.
 
 ## Tech Stack
 
