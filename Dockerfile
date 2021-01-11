@@ -16,10 +16,10 @@ RUN apk add --no-cache --virtual .gyp python3 python make g++ \
 
 COPY . .
 
+RUN npm run build
+COPY --from=0 /app/dist ./dist
 ENV HOST=0.0.0.0
 ENV PORT=4550
 EXPOSE 4550
-
-RUN npm run build
 
 CMD ["npm",  "start"]
