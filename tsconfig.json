@@ -5,9 +5,13 @@
     "target": "ES2020",
     "moduleResolution": "node",
     // typeRoots는 경로
-    "typeRoots": ["./types"],
+    "typeRoots": ["src/types"],
     // * as 를 붙여서 import 해야 하는 부분을 쓰지 않아도 되게끔 해주는 옵션
     "esModuleInterop": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "sourceMap": true,
+    "watch": true,
     // types는 패키지를 적어준다.
     "types": [],
     "noImplicitAny": false,

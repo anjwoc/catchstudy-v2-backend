@@ -52,27 +52,37 @@ const githubCallback = async (req, res, next) => {
 
     if (exUser && exUser.socialType == null) {
       // 일반 회원가입으로 이미 가입한 유저 로그인 진행
-
-      await db.User.findOrCreate({
-        where: { openId: userInfo.id },
-        defaults: {
+      await db.User.update(
+        {
           openId: userInfo.id,
-          name: userInfo.name,
-          email: userInfo.email,
           socialType: userInfo.provider,
           imgSrc: userInfo.photo,
-          location: userInfo.location,
-          about: userInfo.about,
-          job: userInfo.job,
         },
-      });
-
+        {
+          where: { openId: userInfo.id },
+        },
+      );
       return res.redirect(`${process.env.CLIENT_HOST}`);
-    } else {
-      // 가입한 다른 소셜 계정의 이메일이 같은 경우
-      const msg = encodeURIComponent("이미 가입된 이메일 계정입니다.");
-      return res.redirect(`${process.env.CLIENT_HOST}/login?error=${msg}`);
     }
+
+    const password = userInfo.id.slice(8) + Math.random().toString(36).substr(2, 8);
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    await db.User.findOrCreate({
+      where: { openId: userInfo.id },
+      defaults: {
+        openId: userInfo.id,
+        name: userInfo.name,
+        email: userInfo.email,
+        socialType: userInfo.provider,
+        imgSrc: userInfo.photo,
+        password: hashedPassword,
+        location: userInfo.location,
+        about: userInfo.about,
+        job: userInfo.job,
+      },
+    });
+    return res.redirect(`${process.env.CLIENT_HOST}`);
   } catch (err) {
     console.error(err);
   }
