@@ -107,6 +107,7 @@ const updatePost = async <IPost>(req, res, next) => {
       questions,
       minPeople,
       maxPeople,
+      coverImg,
     } = req.body;
     await db.Post.update(
       {
@@ -118,6 +119,7 @@ const updatePost = async <IPost>(req, res, next) => {
         minPeople: minPeople,
         maxPeople: maxPeople,
         numPeople: `${minPeople}-${maxPeople}`,
+        coverImg: coverImg,
       },
       {
         where: {

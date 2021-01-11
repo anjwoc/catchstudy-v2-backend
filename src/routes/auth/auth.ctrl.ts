@@ -30,15 +30,13 @@ const githubLogin = async (req, res, next) => {
 const githubCallback = async (req, res, next) => {
   try {
     const json = req!.user!["_json"];
-    const { id, displayName, username, profileUrl, email, avatar_url, provider, bio, location, company } = json;
+    const { id, name, email, avatar_url, bio, location, company } = json;
     const userInfo = {
       id: id,
-      displayName: displayName,
-      name: username,
-      profileUrl: profileUrl,
+      name: name,
       email: email,
       photo: avatar_url,
-      provider: provider,
+      provider: "github",
       about: bio,
       location: location,
       job: company,
@@ -57,6 +55,8 @@ const githubCallback = async (req, res, next) => {
           openId: userInfo.id,
           socialType: userInfo.provider,
           imgSrc: userInfo.photo,
+          about: userInfo.about,
+          job: userInfo.job,
         },
         {
           where: { openId: userInfo.id },
@@ -65,7 +65,7 @@ const githubCallback = async (req, res, next) => {
       return res.redirect(`${process.env.CLIENT_HOST}`);
     }
 
-    const password = userInfo.id.slice(8) + Math.random().toString(36).substr(2, 8);
+    const password = userInfo.id.toString().slice(4) + Math.random().toString(36).substr(2, 8);
     const hashedPassword = await bcrypt.hash(password, 12);
 
     await db.User.findOrCreate({

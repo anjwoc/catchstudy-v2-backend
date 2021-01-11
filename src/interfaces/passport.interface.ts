@@ -7,7 +7,7 @@ export interface ProfileData {
 }
 
 interface profileJsonData {
-  id: number;
+  id: string;
   displayName: string;
   username: string;
   profileUrl: string;

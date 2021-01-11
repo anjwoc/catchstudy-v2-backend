@@ -99,6 +99,10 @@ User.init(
       type: DataTypes.STRING(40), //40자 이내
       allowNull: true,
     },
+    github: {
+      type: DataTypes.STRING(40), //40자 이내
+      allowNull: true,
+    },
     location: {
       type: DataTypes.STRING(30),
       allowNull: true,

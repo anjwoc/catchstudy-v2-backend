@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "nodemon",
     "start": "node dist/app.js",
-    "build": "tsc -p ./src",
-    "debug": "nodemon --inspect src/app.ts",
+    "build": "tsc -p .",
+    "debug": "npm run build && nodemon --inspect ./dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
