@@ -56,7 +56,7 @@ app.use(
     secret: process.env.COOKIE_SECRET!,
     cookie: {
       httpOnly: true,
-      secure: true, // https -> ture
+      secure: false, // https -> ture
       domain: prod ? '.catchstudy.online' : undefined,
     },
   }),
@@ -65,10 +65,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/api', routes);
-
-app.get('/', (req, res, next) => {
-  res.send('Api Root');
-});
 
 app.listen(app.get('port'), () => {
   console.log(`Server is Listening on port ${app.get('port')}`);
