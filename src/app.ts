@@ -56,7 +56,7 @@ app.use(
     secret: process.env.COOKIE_SECRET!,
     cookie: {
       httpOnly: true,
-      secure: false, // https -> ture
+      secure: true, // https -> ture
       domain: prod ? '.catchstudy.online' : undefined,
     },
   }),
