@@ -17,13 +17,6 @@ RUN apk add --no-cache --virtual .gyp python3 python make g++ \
 
 RUN npm run build
 
-FROM node:14-alpine
-
-WORKDIR /app
-COPY ./package.json ./
-RUN npm install --only=production
-COPY --from=0 /app/dist ./dist
-
 ENV HOST=0.0.0.0
 ENV PORT=4550
 EXPOSE 4550
