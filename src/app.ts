@@ -15,6 +15,8 @@ dotenv.config();
 passportConfig();
 const app = express();
 const prod: boolean = process.env.NODE_ENV === 'production';
+console.log('production: ' + prod);
+console.log(process.env.NODE_ENV);
 app.set('port', prod ? process.env.PORT : 4000);
 sequelize
   .sync({ force: false })
@@ -45,6 +47,7 @@ if (prod) {
   );
 }
 
+app.enable('trust proxy');
 app.use('/', express.static('uploads'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -58,6 +61,7 @@ app.use(
       httpOnly: true,
       secure: true, // https -> ture
       domain: prod ? '.catchstudy.online' : undefined,
+      path: '/'
     },
   }),
 );
