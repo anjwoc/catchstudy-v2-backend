@@ -1,5 +1,7 @@
 # CatchStudy V2 Backend
 
+현재 비용 문제와 도메인 기간 만료로 접속할 수 없습니다.
+
 ## Description
 
 [원본 프로젝트](https://github.com/anjwoc/CatchDev)
